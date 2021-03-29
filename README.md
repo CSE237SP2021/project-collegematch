@@ -12,4 +12,4 @@ Currently, there is an option to display saved colleges, but we have not added a
 
 The 4 colleges are Dartmouth College, Havard College, Washington University, and Iowa State University.
 
-The user can run the runCollegeMatch.sh script in our repository to compile and run our code from the command line.
+The user can run the runCollegeMatch.sh script in our repository to compile and run our code from the command line. Please cd into the project-collegematch folder on your computer before running the script. 
