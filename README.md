@@ -14,5 +14,5 @@ In the next iteration, we plan to work on the college admin officer side. Admin 
    Currently, there is an option to display saved colleges, but we have not added any functionality to add to saved colleges, so this list is always empty at this time. In the future, we will allow the user to edit their saved college list as a separate option on the menu. 
    Additionally, simplifications were made. For example, our current college "database" consists of 4 saved colleges in the app itself. In the future, we will create a csv file that can be read and written to for our college database. 
 
-The user can run the CollegeMatch.sh script in our repository to compile and run our code from the command line. 
+The user can run the runCollegeMatch.sh script in our repository to compile and run our code from the command line. 
 
