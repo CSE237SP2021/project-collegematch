@@ -24,7 +24,7 @@ public class User {
 			System.out.println("You have no saved colleges");
 		} else {
 			for(int i = 0; i < savedColleges.size(); i++) {
-				System.out.println(i + 1 + ": " + savedColleges.get(i).getName());
+				System.out.println(i + 1 + ": " + savedColleges.get(i).getCollegeName());
 			}
 		}		
 	}
@@ -41,9 +41,9 @@ public class User {
 	public ArrayList<College> getCollegeMatches(ArrayList<College> collegesToBeChecked) {
 		ArrayList<College> matchedColleges = new ArrayList<College>();
 		for (College collegeToBeChecked : collegesToBeChecked) {
-			if (satScore >= collegeToBeChecked.getSatScoreMin() 
-					&& gpa >= collegeToBeChecked.getGpaMin() 
-					&& campusPreference.equals(collegeToBeChecked.getCampusType())) {
+			if (satScore >= collegeToBeChecked.getSatScore() 
+					&& gpa >= collegeToBeChecked.getGpa() 
+					&& campusPreference.equals(collegeToBeChecked.getLocation())) {
 				matchedColleges.add(collegeToBeChecked);
 			}
 		}
