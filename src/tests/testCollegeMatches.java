@@ -25,9 +25,9 @@ class testCollegeMatches {
 		String[] output = {"Harvard College", "Washington University"};
 		int numberOfCorrectMatches = 0;
 		for(College college : outputCollegeObjects) {
-			outputCollegeNames.add(college.getName());
+			outputCollegeNames.add(college.getCollegeName());
 			for(String c : output) {
-				if(c.equals(college.getName())) {
+				if(c.equals(college.getCollegeName())) {
 					numberOfCorrectMatches++;
 				}
 			}
