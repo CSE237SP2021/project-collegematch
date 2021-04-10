@@ -9,6 +9,7 @@ public class Menu {
 	private Scanner keyboardIn;
 	private UserManager userManager;
 	private User currentUser;
+	private College currentCollege;
 	private CollegeManager collegeManager;
 	
 	public Menu() {
@@ -49,11 +50,11 @@ public class Menu {
 				displayLoginMenu();
 			}	
 		}
-		else if(accountType.toLowerCase().equals("admissions officer"){
-			System.out.println("Enter username: ");
-			String userName = keyboardIn.nextLine();
-			currentUser = collegeManager.logIn(userName);
-			if(currentUser != null) {
+		else if(accountType.toLowerCase().equals("admissions officer") || accountType.toLowerCase().equals("college admissions officer")){
+			System.out.println("Enter college name: ");
+			String collegeName = keyboardIn.nextLine();
+			currentCollege = collegeManager.logIn(collegeName);
+			if(currentCollege != null) {
 				System.out.println("Login successful");
 				displayCollegeMenu();
 				int selectedOption = this.getUserInput();
@@ -63,6 +64,10 @@ public class Menu {
 				displayRegisterMenu();
 				displayLoginMenu();
 			}	
+		}
+		else {
+			System.out.println("Please enter either 'student' or 'admissions officer'");
+			displayLoginMenu();
 		}
 	}
 	
@@ -101,7 +106,7 @@ public class Menu {
 			userManager.register(userName, satScore, gpa, campusPreference);
 			System.out.println("Registration successful. Transferring you to Login menu");
 		}
-		else if(accountType.toLowerCase().equals("admissions officer")) {
+		else if(accountType.toLowerCase().equals("admissions officer") || accountType.toLowerCase().equals("college admissions officer")) {
 			System.out.println("Enter a college name: ");
 			String collegeName = keyboardIn.nextLine();
 			while (collegeManager.checkForDuplicateCollegename(collegeName)) {
@@ -110,11 +115,11 @@ public class Menu {
 				collegeName = keyboardIn.nextLine();
 			}
 			System.out.println("Enter college size: ");
-			int collegeSize = keyboardIn.nextInt();
-			while (!collegeManager.validateCollegeSize(collegeSize)) {
+			String collegeSize = keyboardIn.nextLine();
+			while (!collegeManager.validateSize(collegeSize)) {
 				System.out.println("Size must be a positive integer");
 				System.out.println("Enter college size: ");
-				collegeSize = keyboardIn.nextInt();
+				collegeSize = keyboardIn.nextLine();
 			}
 			System.out.println("Enter college State code: ");
 			String collegeStateCode = keyboardIn.nextLine();
@@ -140,7 +145,7 @@ public class Menu {
 
 			System.out.println("Enter college's nick name: ");
 			String collegeNickName= keyboardIn.nextLine();
-			while (!collegeManager.checkForDuplicateCollegename(collegeNickName)) {
+			while (collegeManager.checkForDuplicateCollegename(collegeNickName)) {
 				System.out.println("Nick name already exists.");
 				System.out.println("Enter a different nick name: ");
 				collegeNickName= keyboardIn.nextLine();
@@ -153,7 +158,7 @@ public class Menu {
 				tuition = keyboardIn.nextInt();
 			}
 			
-			collegeManager.register(collegeName, collegeSize, collegeStateCode, satScore, gpa, collegeNickName, tuition);
+			collegeManager.register(collegeName, Integer.parseInt(collegeSize), collegeStateCode, satScore, gpa, collegeNickName, tuition);
 			System.out.println("Registration successful. Transferring you to Login menu");
 		}
 		else {
@@ -190,7 +195,7 @@ public class Menu {
 			else {
 				System.out.println("List of your matched college(s) are: ");
 				for (College m : matches) {
-					System.out.println(m.getName());
+					System.out.println(m.getCollegeName());
 				}
 			}
 		} else if (studentOption == 3) { 
@@ -219,7 +224,7 @@ public class Menu {
 	
 	public void processCollegeMenu(int collegeOption) throws IOException {
 		if(collegeOption == 1) {
-			collegeManager.displayCollege(currentUser);
+			collegeManager.displayCollege(currentCollege);
 		} else if (collegeOption == 2) { 
 			System.out.println("Are you sure you want to sign out? (Y/N) ");
 			String confirmation = keyboardIn.nextLine();
