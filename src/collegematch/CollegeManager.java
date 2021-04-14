@@ -17,6 +17,7 @@ public class CollegeManager {
 		}
 	}
 	
+	
 	public ArrayList<College> readColleges() throws FileNotFoundException{
 		ArrayList<College> allColleges = new ArrayList<College>();
 		Scanner keyboardIn = new Scanner(new File("./src/collegematch/college.csv"));
@@ -37,6 +38,8 @@ public class CollegeManager {
 		keyboardIn.close();
 		return allColleges;
 	}
+	
+
 	
 	//find colleges by college names
 	public void searchCollege(String collegeName) {
@@ -84,6 +87,7 @@ public class CollegeManager {
 		return collegeID;
 	}
 	
+
 	//returns College object when given collegeID
 	public College findCollege (int collegeID) {
 		for (College college : colleges) {
