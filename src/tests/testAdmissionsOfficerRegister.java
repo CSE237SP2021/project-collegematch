@@ -14,6 +14,7 @@ import collegematch.UserManager;
 
 class testAdmissionsOfficerRegister {
 
+	
 	@Test
 	void testRegister() throws IOException {
 		UserManager userManager = new UserManager();

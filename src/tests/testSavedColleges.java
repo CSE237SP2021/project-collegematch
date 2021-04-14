@@ -13,6 +13,7 @@ import collegematch.College;
 
 public class testSavedColleges {
 	
+	
 	@Test 
 	void testSetSavedColleges() {
 		Student student = new Student("bob", 1, 1250, 3.5, 20000, 20000);

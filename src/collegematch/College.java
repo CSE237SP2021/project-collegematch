@@ -14,7 +14,7 @@ public class College {
 	public College(int collegeID, String collegeName, int size, String location, int satScore, double gpa, String collegeName2, int tuition) {
 		this.collegeID = collegeID;
 		this.collegeName = collegeName;
-		this.size=size;
+		this.size = size;
 		this.location = location;
 		this.satScore = satScore;
 		this.gpa = gpa;

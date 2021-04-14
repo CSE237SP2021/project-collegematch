@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Student extends User {
 	private int satScore;
 	private double gpa;
-	private int tuitionPreference; //maximum tuition willing to pay
+	private int tuitionPreference; //maximum tuition student is willing to pay
 	private int sizePreference; //maximum size preferred
 	private ArrayList<College> savedColleges;
 	

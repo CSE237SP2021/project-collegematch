@@ -322,7 +322,7 @@ public class Menu {
 		System.out.println("2. Sign out");
 	}
 	
-	//Processes the student selected option
+	//Processes the student selected option from student menu
 	//1. Displays saved colleges
 	//2. Edit saved colleges
 	//3. Get college matches

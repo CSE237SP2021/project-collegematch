@@ -1,11 +1,11 @@
 package collegematch;
 
-public class AdmissionsOfficer extends User{
+public class AdmissionsOfficer extends User {
 	private int collegeID;
 	
 	public AdmissionsOfficer (String username, int role, int collegeID) {
 		super(username, role);
-		this.collegeID = collegeID;
+		this.collegeID = collegeID; //college admission officer is associated with
 	}
 	
 	public int getCollegeID() {

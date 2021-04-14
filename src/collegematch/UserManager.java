@@ -64,7 +64,7 @@ public class UserManager {
 		return allUsers;
 	}
 		
-	//registers Student by adding them to total list of users and by adding them to userInfo.csv file 
+	//registers Student by adding them to total users list and by adding them to userInfo.csv file 
 	public void registerStudent(String userName, int role, int satScore, double gpa, int tuitionPreference, int sizePreference) throws IOException {
 		Student student = new Student(userName, role, satScore, gpa, tuitionPreference, sizePreference);
 		users.add(student);

@@ -3,7 +3,7 @@ package collegematch;
 public class User {
 
 	private String username;
-	private int role; //stored as 1 for student and 2 for admissions officer in userInfo.csv   
+	private int role; //1 for student and 2 for admissions officer in userInfo.csv   
 	
 	public User(String username, int role) {
 		this.username = username;

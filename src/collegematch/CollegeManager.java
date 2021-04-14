@@ -99,7 +99,6 @@ public class CollegeManager {
 		return colleges;
 	}
 
-	//for menu
 	public boolean validateSize(int size) {
 		if (size >= 10 && size <= 60000) {
 			return true;
