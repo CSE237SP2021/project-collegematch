@@ -4,7 +4,10 @@ Anamika Basu, Ziyuan Li, Sai Akhil Pulikam, Charlie Yan
 
 CollegeMatch is a Java application that helps students find the college of their dreams and helps college admin officers market their college to students!
 
-**To run our application, run the runCollegeMatch.sh script in our repository from the command line. Please cd into the project-collegematch folder on your computer before running the script.**
+**To run our application, run the following commands**
+1. cd project-collegematch
+2. git checkout development 
+3. bash runCollegeMatch.sh 
 
 ## Iteration 1
 This iteration, we focused on the student side. Students can now register and login to the app, get college matches, and get information about certain colleges.
