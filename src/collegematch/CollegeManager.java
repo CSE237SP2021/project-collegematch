@@ -9,22 +9,12 @@ import java.util.ArrayList;
 public class CollegeManager {
 	private ArrayList<College> colleges;
 	
-	//hard code college into a arraylist
 	public CollegeManager() {
 		try {
 			this.colleges = this.readColleges();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public College logIn(String collegeName) {
-		for (College college: colleges) {
-			if (college.getCollegeName().equals(collegeName)) {
-				return college;
-			}
-		}
-		return null;
 	}
 	
 	public ArrayList<College> readColleges() throws FileNotFoundException{
@@ -34,10 +24,15 @@ public class CollegeManager {
 		while (keyboardIn.hasNextLine())
 		{
 			String[] collegeDataInArray = keyboardIn.nextLine().split(",");
-			allColleges.add(new College(collegeDataInArray[0],  
-					Integer.parseInt(collegeDataInArray[1]), collegeDataInArray[2],  
-					Integer.parseInt(collegeDataInArray[3]), Double.parseDouble(collegeDataInArray[4]), collegeDataInArray[5], 
-					Integer.parseInt(collegeDataInArray[6])));
+			int collegeID = Integer.parseInt(collegeDataInArray[0]);
+			String collegeName = collegeDataInArray[1];
+			int size = Integer.parseInt(collegeDataInArray[2]);
+			String state = collegeDataInArray[3];
+			int sat = Integer.parseInt(collegeDataInArray[4]);
+			double gpa = Double.parseDouble(collegeDataInArray[5]);
+			String nickname = collegeDataInArray[6];
+			int tuition = Integer.parseInt(collegeDataInArray[7]);
+			allColleges.add(new College(collegeID, collegeName, size, state, sat, gpa, nickname, tuition));
 		}
 		keyboardIn.close();
 		return allColleges;
@@ -62,12 +57,16 @@ public class CollegeManager {
 		}
 	}
 
-	public void register(String collegeName, int size, String location, int satScore, double gpa, String collegeName2, int tuition) throws IOException {
-		College college = new College(collegeName, size, location, satScore, gpa, collegeName2, tuition);
+	//adds college to colleges ArrayList and adds college to college.csv
+	public int addCollege(String collegeName, int size, String location, int satScore, double gpa, String collegeName2, int tuition) throws IOException {
+		int collegeID = colleges.size() + 1;
+		College college = new College(collegeID, collegeName, size, location, satScore, gpa, collegeName2, tuition);
 		colleges.add(college);
 		FileWriter writer = new FileWriter("./src/collegematch/college.csv", true);
 
 		writer.append("\n");
+		writer.append(String.valueOf(collegeID));
+		writer.append(",");
 		writer.append(collegeName);
 		writer.append(",");
 		writer.append(String.valueOf(size));
@@ -82,16 +81,27 @@ public class CollegeManager {
 		writer.append(",");
 		writer.append(String.valueOf(tuition));
 		writer.close();
+		return collegeID;
 	}
 	
-	//return the arraylist of colleges
+	//returns College object when given collegeID
+	public College findCollege (int collegeID) {
+		for (College college : colleges) {
+			if (collegeID == college.getCollegeID()) {
+				return college;
+			}
+		}
+		return null;
+	}
+	
+	
 	public ArrayList<College> getColleges(){
 		return colleges;
 	}
 
 	//for menu
-	public boolean validateSize(String size) {
-		if (Integer.parseInt(size)>0) {
+	public boolean validateSize(int size) {
+		if (size >= 10 && size <= 60000) {
 			return true;
 		}
 		return false;
@@ -108,7 +118,7 @@ public class CollegeManager {
 
 	public boolean checkForDuplicateCollegename(String collegeName) {
 		for (College college: colleges) {
-			if (college.getCollegeName() == collegeName) {
+			if (college.getCollegeName().equals(collegeName)) {
 				return true;
 			}
 		}
@@ -131,22 +141,34 @@ public class CollegeManager {
 
 	public boolean checkForDuplicateCollegename2(String collegeName2) {
 		for (College college: colleges) {
-			if (college.getCollegeName2() == collegeName2) {
+			if (college.getCollegeName2().equals(collegeName2)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean validateTuition(String tuition) {
-		if (Integer.parseInt(tuition)>=0) {
+	public boolean validateTuition(int tuition) {
+		if (tuition >= 100 && tuition <= 100000) {
 			return true;
 		}
 		return false;
 	}
 
+	
 	public void displayCollege(College college) {
 		college.displayCollegeInformation();
+	}
+	
+	
+	public void displayAllColleges() {
+		for (int i = 1; i <= colleges.size(); i++) {
+			System.out.println(i + ". " + colleges.get(i-1).getCollegeName());
+		}
+	}
+	
+	public int getCollegesLength() {
+		return colleges.size();
 	}
 
 }

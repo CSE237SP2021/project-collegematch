@@ -10,9 +10,16 @@ import collegematch.UserManager;
 class testLogin {
 
 	@Test
-	void testLoginSuccessful() {
+	void testStudentLoginSuccessful() {
 		UserManager UserManager = new UserManager();
 		User outputUserObject = UserManager.logIn("batman");
+		assertTrue(outputUserObject != null);
+	}
+	
+	@Test
+	void testAdmissionOfficerLoginSuccessful() {
+		UserManager UserManager = new UserManager();
+		User outputUserObject = UserManager.logIn("harvard_rep");
 		assertTrue(outputUserObject != null);
 	}
 

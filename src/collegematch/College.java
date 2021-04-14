@@ -1,17 +1,18 @@
 package collegematch;
 
 public class College {
-	
+	private int collegeID;
 	private String collegeName;
 	private int size;
 	private String location;
 	private int satScore;
 	private double gpa;
-	private String collegeName2;
+	private String collegeName2; //College Nickname
 	private int tuition;
 
 	
-	public College(String collegeName, int size, String location, int satScore, double gpa, String collegeName2, int tuition) {
+	public College(int collegeID, String collegeName, int size, String location, int satScore, double gpa, String collegeName2, int tuition) {
+		this.collegeID = collegeID;
 		this.collegeName = collegeName;
 		this.size=size;
 		this.location = location;
@@ -21,15 +22,18 @@ public class College {
 		this.tuition = tuition;
 	}
 	
-	
 	public void displayCollegeInformation() {
 		System.out.println("College: "+ collegeName);
-		System.out.println("Size: "+location);
+		System.out.println("Size: "+ size);
 		System.out.println("Location: "+location);
 		System.out.println("SAT: "+satScore);
 		System.out.println("Nick Name: " + collegeName2);
-		System.out.println("GPA: "+gpa);
-		System.out.println("Tuition: "+tuition);
+		System.out.println("GPA: "+ gpa);
+		System.out.println("Tuition: $"+tuition);
+	}
+	
+	public int getCollegeID() {
+		return collegeID;
 	}
 	
 	public String getCollegeName() {
