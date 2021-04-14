@@ -12,33 +12,33 @@ import collegematch.UserManager;
 
 class testStudentRegister {
 
+	
 	@Test
-	void test() throws IOException {
+	void testRegister() throws IOException {
 		UserManager userManager = new UserManager();
-		userManager.register("dan", 1100, 3.0, "rural");
+		userManager.registerStudent("testUser", 1, 1100, 3.0, 10000,1000);
 		ArrayList<User> allUsers = userManager.readUsers();
 		boolean match = false;
 		for(User user : allUsers) {
-			if(user.getUsername().equals("dan") 
-					&&(user.getGpa()==3.0) &&user.getCampusPreference().equals("rural")) {
+			if(user.getUsername().equals("testUser")) {
 				match = true;
 			}
 		}
 		assertEquals(true, match);
 	}
 	
-	@Test 
-	void testCorrectCampusPreference() {
+	@Test
+	void testDuplicateUsername() {
 		UserManager userManager = new UserManager();
-		boolean campusPreferenceFormatted = userManager.validateCampusPreference("rural");
-		assertTrue(campusPreferenceFormatted);
+		boolean duplicate = userManager.checkForDuplicateUsername("batman");
+		assertEquals(true, duplicate);
 	}
 	
-	@Test 
-	void testIncorrectCampusPreference() {
+	@Test
+	void testNotADuplicateUsername() {
 		UserManager userManager = new UserManager();
-		boolean campusPreferenceFormatted = userManager.validateCampusPreference("suburban");
-		assertFalse(campusPreferenceFormatted);
+		boolean notADuplicate = userManager.checkForDuplicateUsername("charles");
+		assertEquals(false, notADuplicate);
 	}
 	
 	@Test 
@@ -67,6 +67,34 @@ class testStudentRegister {
 		UserManager userManager = new UserManager();
 		boolean gpaFormatted = userManager.validateGPA(5.09);
 		assertFalse(gpaFormatted);
+	}
+	
+	@Test 
+	void testCorrectTuitionPreference() {
+		UserManager userManager = new UserManager();
+		boolean tuitionFormatted = userManager.validateTuitionPreference(10000);
+		assertTrue(tuitionFormatted);
+	}
+	
+	@Test 
+	void testIncorrectTuitionPreference() {
+		UserManager userManager = new UserManager();
+		boolean tuitionFormatted = userManager.validateTuitionPreference(200000);
+		assertFalse(tuitionFormatted);
+	}
+	
+	@Test 
+	void testCorrectSizePreference() {
+		UserManager userManager = new UserManager();
+		boolean sizeFormatted = userManager.validateSizePreference(20);
+		assertTrue(sizeFormatted);
+	}
+	
+	@Test 
+	void testIncorrectSizePreference() {
+		UserManager userManager = new UserManager();
+		boolean sizeFormatted = userManager.validateSizePreference(70000);
+		assertFalse(sizeFormatted);
 	}
 
 }

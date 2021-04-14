@@ -11,6 +11,7 @@ import java.util.Scanner;
 public class UserManager {
 
 	private ArrayList<User> users;
+	private String filePath = "./src/collegematch/userInfo.csv";
 	
 	public UserManager() {
 		try {
@@ -30,72 +31,172 @@ public class UserManager {
 		return null;
 	}
 	
-	// reads userinfo from the databse(csv file) file and create & adds user object to arraylist
-		public ArrayList<User> readUsers() throws FileNotFoundException{
-			ArrayList<User> allUsers = new ArrayList<User>();
-			Scanner keyboardIn = new Scanner(new File("./src/collegematch/userInfo.csv"));
-			keyboardIn.useDelimiter("/n");
-			while (keyboardIn.hasNextLine())
-			{
-				String[] userDataInArray = keyboardIn.nextLine().split(",");
-				allUsers.add(new User(userDataInArray[0],  Integer.parseInt(userDataInArray[1]), Double.parseDouble(userDataInArray[2]), userDataInArray[3]));
+	// reads user information from the database (userInfo.csv file) and create & adds user object to arraylist
+	public ArrayList<User> readUsers() throws FileNotFoundException{
+		ArrayList<User> allUsers = new ArrayList<User>();
+		//Instantiates Scanner class to read userInfo.csv file 
+		Scanner keyboardIn = new Scanner(new File(filePath));
+		keyboardIn.useDelimiter("/n");
+		while (keyboardIn.hasNextLine())
+		{
+			String[] userDataInArray = keyboardIn.nextLine().split(",");
+			if (Integer.parseInt(userDataInArray[1]) == 1) {
+				String username = userDataInArray[0];
+				int role = Integer.parseInt(userDataInArray[1]);
+				int sat = Integer.parseInt(userDataInArray[2]);
+				double gpa = Double.parseDouble(userDataInArray[3]);
+				int tuitionPreference = Integer.parseInt(userDataInArray[4]);
+				int sizePreference = Integer.parseInt(userDataInArray[5]);
+				Student student = new Student(username, role, sat, gpa, tuitionPreference, sizePreference);
+				allUsers.add(student);
+				if (userDataInArray.length == 7) {
+					student.setSavedColleges(userDataInArray[6]);
+				} 
+			} else {
+				String username = userDataInArray[0];
+				int role = Integer.parseInt(userDataInArray[1]);
+				int collegeID = Integer.parseInt(userDataInArray[2]);
+				allUsers.add(new AdmissionsOfficer(username, role, collegeID));
 			}
-			keyboardIn.close();
-			return allUsers;
+			
 		}
+		keyboardIn.close();
+		return allUsers;
+	}
 		
-		// registers new user by creating a new user object, adding it to array list and database.
-		public void register(String userName, int satScore, double gpa, String campusPreference) throws IOException {
-			User user = new User(userName, satScore, gpa, campusPreference);
-			users.add(user);
-			FileWriter writer = new FileWriter("./src/collegematch/userInfo.csv", true);
-			writer.append("\n");
-			writer.append(userName);
-			writer.append(",");
-			writer.append(String.valueOf(satScore));
-			writer.append(",");
-			writer.append(String.valueOf(gpa));
-			writer.append(",");
-			writer.append(campusPreference);
-			writer.close();
-		}
-		
-		public boolean validateCampusPreference(String campusPreference) {
-			if (campusPreference.equals("rural" )|| campusPreference.equals("urban")) {
-				return true;
-			}
-			return false;
-		}
-
-		public boolean checkForDuplicateUsername(String userName) {
-			for (User user: users) {
-				if (user.getUsername() == userName) {
-					return true;
+	//registers Student by adding them to total users list and by adding them to userInfo.csv file 
+	public void registerStudent(String userName, int role, int satScore, double gpa, int tuitionPreference, int sizePreference) throws IOException {
+		Student student = new Student(userName, role, satScore, gpa, tuitionPreference, sizePreference);
+		users.add(student);
+		FileWriter writer = new FileWriter(filePath, true);
+		writer.append("\n");
+		writer.append(userName);
+		writer.append(",");
+		writer.append(String.valueOf(role));
+		writer.append(",");
+		writer.append(String.valueOf(satScore));
+		writer.append(",");
+		writer.append(String.valueOf(gpa));
+		writer.append(",");
+		writer.append(String.valueOf(tuitionPreference));
+		writer.append(",");
+		writer.append(String.valueOf(sizePreference));
+		writer.close();	
+	}
+	
+	//registers Admission Officer by adding them to total list of users and by adding them to userInfo.csv file 
+	public void registerAdmissionsOfficer(String userName, int role, int collegeID) throws IOException {
+		AdmissionsOfficer admissionsOfficer = new AdmissionsOfficer(userName, role, collegeID);
+		users.add(admissionsOfficer);
+		FileWriter writer = new FileWriter(filePath, true);
+		writer.append("\n");
+		writer.append(userName);
+		writer.append(",");
+		writer.append(String.valueOf(role));
+		writer.append(",");
+		writer.append(String.valueOf(collegeID));
+		writer.close();	
+	}
+	
+	//updates user's saved colleges in userInfo.csv 
+	public void updateSavedCollegesInFile(Student student) throws FileNotFoundException, IOException {
+		String userName = student.getUsername();
+		//Instantiates Scanner class to read userInfo.csv file 
+		Scanner keyboardIn = new Scanner(new File(filePath));
+		//Instantiates StringBuffer class
+		StringBuffer buffer = new StringBuffer();
+		keyboardIn.useDelimiter("/n");
+		//Reads lines of the file and appends them to StringBuffer
+		while (keyboardIn.hasNextLine()) {
+			String line = keyboardIn.nextLine();
+			String[] userDataInArray = line.split(",");
+			//finds line that matches student user name
+			if (userName.equals(userDataInArray[0])) {
+				String newLine = "";
+				//checks whether student has any saved colleges 
+				if (userDataInArray.length == 7) {
+					//if student does have saved colleges, rewrites the entire line 
+					userDataInArray[6] = student.getSavedCollegesStringList();
+					for (String field : userDataInArray) {
+						newLine = newLine + field + ",";
+					}
+					newLine = newLine.substring(0, newLine.length() - 1);
+					line = newLine;
+				} else {
+					//if student doesn't have saved colleges, adds to end of line 
+					newLine = line + "," + student.getSavedCollegesStringList();
+					line = newLine;
 				}
 			}
-			return false;
+			buffer.append(line + System.lineSeparator());
 		}
-		
-		public boolean validateSATScore(int satScore) {
-			if (satScore >= 400 && satScore <= 1600) {
-				return true;
-			}
-			return false;
-		}
-		
-		public boolean validateGPA(double gpa) {
-			if (gpa >= 0.0 && gpa <= 4.0) {
-				return true;
-			}
-			return false;
-		}
-		
-		public void displayUserSavedCollegeList(User user) {
-			user.displaySavedColleges();
-		}
+		String fileContents = buffer.toString();
+		keyboardIn.close();
+		//rewrites entire file with FileWriter 
+		FileWriter writer = new FileWriter(filePath, false);
+		writer.append(fileContents);
+		writer.close();	
+	}	
 
-		public ArrayList<College> getCollegeMatches(User user, ArrayList<College> colleges) {
-			ArrayList<College> matches = user.getCollegeMatches(colleges);
-			return matches;
+
+	public boolean checkForDuplicateUsername(String userName) {
+		for (User user: users) {
+			if (user.getUsername().equals(userName)) {
+				return true;
+			}
 		}
+		return false;
+	}
+	
+	public boolean validateSATScore(int satScore) {
+		if (satScore >= 400 && satScore <= 1600) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean validateGPA(double gpa) {
+		if (gpa >= 0.0 && gpa <= 4.0) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean validateTuitionPreference(int tuitionPreference) {
+		if (tuitionPreference >= 100 && tuitionPreference <= 100000) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean validateSizePreference(int sizePreference) {
+		if (sizePreference >= 10 && sizePreference <= 60000) {
+			return true;
+		}
+		return false;
+	}
+	
+	//methods below are called from Menu.java, which uses UserManager as a middle man to call methods on User objects without 
+	//violating Law of Demeter 
+	public ArrayList<College> getUserSavedCollegeList(Student student) {
+		return student.getSavedColleges();
+	}
+
+	public ArrayList<College> getCollegeMatches(Student student, ArrayList<College> colleges) {
+		ArrayList<College> matches = student.getCollegeMatches(colleges);
+		return matches;
+	}
+
+	public void saveNewCollege (Student student, College college) {
+		student.saveNewCollege(college);
+	}
+	
+	public void deleteSavedCollege (Student student, College college) {
+		student.deleteSavedCollege(college);
+	}
+	
+	public int getUserRole (User user) {
+		return user.getRole();
+	}
+		
 }
