@@ -448,6 +448,7 @@ public class Menu {
 
 	//method called when student has no saved colleges but tries to edit saved colleges from menu 
 	public void processNoSavedColleges(Student student) throws FileNotFoundException, IOException {
+		System.out.println("");
 		collegeManager.displayAllColleges();
 		while(true) {
 			System.out.println("You currently have no saved colleges. Enter one collegeID to save: ");
@@ -470,9 +471,13 @@ public class Menu {
 
 	public void displaySavedColleges(ArrayList<College> savedColleges) {
 		System.out.println("");
-		System.out.println("Your current saved colleges are: ");
-		for (int i = 1; i <= savedColleges.size(); i++) {
-			System.out.println(i + ". " + (savedColleges.get(i-1)).getCollegeName());
+		if (savedColleges.size() == 0) {
+			System.out.println("You have no saved colleges");
+		} else {
+			System.out.println("Your current saved colleges are: ");
+			for (int i = 1; i <= savedColleges.size(); i++) {
+				System.out.println(i + ". " + (savedColleges.get(i-1)).getCollegeName());
+			}
 		}
 		System.out.println("");
 	}
