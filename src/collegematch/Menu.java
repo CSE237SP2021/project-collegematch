@@ -429,10 +429,11 @@ public class Menu {
 		while(true) {
 			System.out.println("Enter one collegeID to delete: ");
 			int collegeSelection = getIntInput();
+			College collegeToBeRemoved = collegeManager.findCollege(collegeSelection);
 			//checks if student selects input correctly from list 
-			if (collegeSelection > 0 && collegeSelection <= savedColleges.size()) {
+//			if (collegeSelection > 0 && collegeSelection <= savedColleges.size()) {
 				//deletes college from local Student object savedColleges ArrayList
-				userManager.deleteSavedCollege(student, savedColleges.get(collegeSelection - 1));
+				userManager.deleteSavedCollege(student, collegeManager.findCollege(collegeSelection));
 				//displays current saved colleges 
 				ArrayList<College> newSavedColleges = userManager.getUserSavedCollegeList(student);
 				if (newSavedColleges.size() == 0) {
@@ -440,12 +441,13 @@ public class Menu {
 				} else {
 					displaySavedColleges(newSavedColleges);
 				}	
+				
+				collegeToBeRemoved.decrementSaves();
+				collegeManager.updateColleges();
 				//deletes college from userInfo.csv file	
 				userManager.updateSavedCollegesInFile(student);
 				break;
-			} else {
-				System.out.println("Invalid college ID.");
-			}
+//			} 
 		}
 	}
 
@@ -453,18 +455,17 @@ public class Menu {
 			throws FileNotFoundException, IOException {
 		collegeManager.displayAllColleges();
 		while(true) {
-			System.out.println("Enter one collegeID to save: ");
+			System.out.println("Enter one ID to save: ");
 			int collegeSelection = getIntInput();
 			College collegeToBeSaved = collegeManager.findCollege(collegeSelection);
 			if (collegeToBeSaved == null) {
-				System.out.println("Invalid college ID.");
+				System.out.println("Invalid ID.");
 			} else {
 				//prevent user from adding a saved college again 
 				boolean alreadySaved = checkCollegeAlreadySaved(savedColleges, collegeToBeSaved);
 				if (alreadySaved) {
 					System.out.println("College has already been saved.");
 				} else {
-					collegeToBeSaved.increamentSaves();
 					//saves college to local Student object savedColleges ArrayList
 					userManager.saveNewCollege(student, collegeToBeSaved);
 					//displays current saved colleges
@@ -472,6 +473,13 @@ public class Menu {
 					displaySavedColleges(newSavedColleges);
 					//adds new college to userInfo.csv file	
 					userManager.updateSavedCollegesInFile(student);
+					
+					
+					//collegeManager.updateSavedCollegeNumber(collegeToBeSaved.getCollegeID());
+					//collegeManager.deleteCollege(collegeToBeSaved.getCollegeID());
+					collegeToBeSaved.increamentSaves();
+					collegeManager.updateColleges();
+					//collegeManager.addCollege(collegeToBeSaved.getCollegeName(), collegeToBeSaved.getSize(), collegeToBeSaved.getLocation(), collegeToBeSaved.getSatScore(), collegeToBeSaved.getGpa(), collegeToBeSaved.getCollegeName2(), collegeToBeSaved.getTuition(), collegeToBeSaved.getNumbeOfSaves(), collegeToBeSaved.getCollegeID());
 					break;
 				}
 			}
@@ -493,11 +501,11 @@ public class Menu {
 		System.out.println("");
 		collegeManager.displayAllColleges();
 		while(true) {
-			System.out.println("You currently have no saved colleges. Enter one collegeID to save: ");
+			System.out.println("You currently have no saved colleges. Enter one ID to save: ");
 			int collegeSelection = getIntInput();
 			College collegeToBeSaved = collegeManager.findCollege(collegeSelection);
 			if (collegeToBeSaved == null) {
-				System.out.println("Invalid college ID.");
+				System.out.println("Invalid ID.");
 			} else {
 				//saves college to local Student object savedColleges ArrayList
 				userManager.saveNewCollege(student, collegeToBeSaved);
@@ -506,6 +514,8 @@ public class Menu {
 				displaySavedColleges(newSavedColleges);
 				//adds new college to userInfo.csv file 
 				userManager.updateSavedCollegesInFile(student);
+				collegeToBeSaved.increamentSaves();
+				collegeManager.updateColleges();
 				break;
 			}
 		}
@@ -517,8 +527,12 @@ public class Menu {
 			System.out.println("You have no saved colleges");
 		} else {
 			System.out.println("Your current saved colleges are: ");
-			for (int i = 1; i <= savedColleges.size(); i++) {
-				System.out.println(i + ". " + (savedColleges.get(i-1)).getCollegeName());
+			System.out.println();
+			System.out.println("ID" + " College Name");
+			System.out.println();
+
+			for (College savedCollege : savedColleges) {
+				System.out.println(savedCollege.getCollegeID() + "  " + savedCollege.getCollegeName());
 			}
 		}
 		System.out.println("");

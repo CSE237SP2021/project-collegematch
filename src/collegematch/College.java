@@ -72,6 +72,9 @@ public class College {
 	}
 	
 	public void increamentSaves() {
-		this.numberOfSaves=this.numberOfSaves+1;
+		this.numberOfSaves = this.numberOfSaves + 1;
+	}
+	public void decrementSaves() {
+		this.numberOfSaves = this.numberOfSaves - 1;
 	}
 }
