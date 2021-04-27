@@ -61,7 +61,17 @@ public class Menu {
 	public void runLoginMenu() throws Exception {
 		System.out.println("Enter username: ");
 		String userName = keyboardIn.nextLine();
-		currentUser = userManager.logIn(userName);
+		if (userManager.getUserRole(currentUser) == 2) {
+			System.out.println("Enter password: ");
+			String password = keyboardIn.nextLine();
+
+			currentUser = userManager.logIn(userName, password);
+		
+			System.out.println("incorrect password");
+		}
+		
+		
+		else currentUser = userManager.logIn(userName, "");
 		processLoginMenu();	
 	}
 
@@ -197,6 +207,9 @@ public class Menu {
 		System.out.println("Enter a username: ");
 		String userName = processStringBaseMethod("processUsername");
 		
+		System.out.println("Enter a password: ");
+		String password = processStringBaseMethod("processUsername");
+		
 		collegeManager.displayAllColleges();
 		
 		while(true) {
@@ -225,7 +238,7 @@ public class Menu {
 				int tuition = processIntBaseMethod("processCollegeTuition");
 				
 				int collegeID = collegeManager.addCollege(collegeName, collegeSize, collegeStateCode, satScore, gpa, collegeNickName, tuition);
-				userManager.registerAdmissionsOfficer(userName, 2, collegeID);
+				userManager.registerAdmissionsOfficer(userName, password, 2, collegeID);
 				System.out.println("Registration successful. Transferring you to Welcome menu");
 				runWelcomeMenu();
 			} else {
@@ -233,7 +246,7 @@ public class Menu {
 				if (collegeToBeSaved == null) {
 					System.out.println("Invalid college ID.");
 				} else {
-					userManager.registerAdmissionsOfficer(userName, 2, collegeSelection);
+					userManager.registerAdmissionsOfficer(userName, password, 2, collegeSelection);
 					System.out.println("Registration successful. Transferring you to Welcome menu");
 					runWelcomeMenu();
 				}

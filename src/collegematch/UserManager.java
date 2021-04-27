@@ -22,10 +22,28 @@ public class UserManager {
 	}
 	
 	// checks if entered user name exists in database and returns the object, else returns null
+	public User logIn(String userName, String password) {
+		for (User user: users) {
+			if (user.getUsername().equals(userName)) {
+				if(user.getRole() == 1) return user;
+				else {
+					if(user.getPassword() == password) {
+						return user;
+					}
+					else {
+						System.out.println("wrong password bro");
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	
 	public User logIn(String userName) {
 		for (User user: users) {
 			if (user.getUsername().equals(userName)) {
-				return user;
+				 return user;
 			}
 		}
 		return null;
@@ -54,9 +72,10 @@ public class UserManager {
 				} 
 			} else {
 				String username = userDataInArray[0];
+				String password = userDataInArray[3];
 				int role = Integer.parseInt(userDataInArray[1]);
 				int collegeID = Integer.parseInt(userDataInArray[2]);
-				allUsers.add(new AdmissionsOfficer(username, role, collegeID));
+				allUsers.add(new AdmissionsOfficer(username, password, role, collegeID));
 			}
 			
 		}
@@ -85,8 +104,8 @@ public class UserManager {
 	}
 	
 	//registers Admission Officer by adding them to total list of users and by adding them to userInfo.csv file 
-	public void registerAdmissionsOfficer(String userName, int role, int collegeID) throws IOException {
-		AdmissionsOfficer admissionsOfficer = new AdmissionsOfficer(userName, role, collegeID);
+	public void registerAdmissionsOfficer(String userName,  String password, int role, int collegeID) throws IOException {
+		AdmissionsOfficer admissionsOfficer = new AdmissionsOfficer(userName, password, role, collegeID);
 		users.add(admissionsOfficer);
 		FileWriter writer = new FileWriter(filePath, true);
 		writer.append("\n");
@@ -95,6 +114,8 @@ public class UserManager {
 		writer.append(String.valueOf(role));
 		writer.append(",");
 		writer.append(String.valueOf(collegeID));
+		writer.append(",");
+		writer.append(password);
 		writer.close();	
 	}
 	
