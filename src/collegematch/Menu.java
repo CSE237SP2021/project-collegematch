@@ -61,19 +61,14 @@ public class Menu {
 	public void runLoginMenu() throws Exception {
 		System.out.println("Enter username: ");
 		String userName = keyboardIn.nextLine();
-		if (userManager.getUserRole(currentUser) == 2) {
-			System.out.println("Enter password: ");
-			String password = keyboardIn.nextLine();
+		System.out.println("Enter password: ");
+		String password = keyboardIn.nextLine();
 
-			currentUser = userManager.logIn(userName, password);
-		
-			System.out.println("incorrect password");
-		}
-		
-		
-		else currentUser = userManager.logIn(userName, "");
+		currentUser = userManager.logIn(userName, password);
+
 		processLoginMenu();	
 	}
+	
 
 	public void processLoginMenu() throws Exception {
 		if(currentUser != null) {
@@ -140,6 +135,9 @@ public class Menu {
 		System.out.println("Enter a username: ");
 		String userName = processStringBaseMethod("processUsername");
 		
+		System.out.println("Enter a password: ");
+		String password = processStringBaseMethod("processUsername");
+		
 		System.out.println("Enter your SAT Score: ");
 		int satScore = processIntBaseMethod("processSATScore");
 		
@@ -152,8 +150,9 @@ public class Menu {
 		System.out.println("Enter maximum campus size preference (value must be between 10 and 60000): ");
 		int sizePreference = processIntBaseMethod("processSizePreference");
 		
-		userManager.registerStudent(userName, 1, satScore, gpa, tuitionPreference, sizePreference);
+		userManager.registerStudent(userName, 1, satScore, gpa, tuitionPreference, sizePreference, password);
 		System.out.println("Registration successful. Transferring you to Welcome menu");
+
 		runWelcomeMenu();
 	}
 

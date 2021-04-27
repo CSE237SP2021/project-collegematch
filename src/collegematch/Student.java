@@ -8,14 +8,16 @@ public class Student extends User {
 	private int tuitionPreference; //maximum tuition student is willing to pay
 	private int sizePreference; //maximum size preferred
 	private ArrayList<College> savedColleges;
+	private String password;
 	
-	public Student(String username, int role, int satScore, double gpa, int tuitionPreference, int sizePreference) {
-		super(username, role);
+	public Student(String username, int role, int satScore, double gpa, int tuitionPreference, int sizePreference, String password) {
+		super(username, role, password);
 		this.satScore = satScore;
 		this.gpa = gpa;
 		this.tuitionPreference = tuitionPreference;
 		this.sizePreference = sizePreference;
 		this.savedColleges = new ArrayList<College>(); 
+		this.password = password;
 	}
 	
 	public void saveNewCollege(College collegeToBeAdded) {
@@ -58,6 +60,9 @@ public class Student extends User {
 	
 	public int getSavedCollegesSize() {
 		return savedColleges.size();	
+	}
+	public String getPassword() {
+		return password;
 	}
 	
 	//creates String that contains all colleges in saved college list referred to by their IDs separated by hyphens 

@@ -25,29 +25,18 @@ public class UserManager {
 	public User logIn(String userName, String password) {
 		for (User user: users) {
 			if (user.getUsername().equals(userName)) {
-				if(user.getRole() == 1) return user;
-				else {
-					if(user.getPassword() == password) {
+
+					if(user.getPassword().equals(password)) {
 						return user;
 					}
 					else {
 						System.out.println("wrong password bro");
 					}
-				}
 			}
 		}
 		return null;
 	}
 	
-	
-	public User logIn(String userName) {
-		for (User user: users) {
-			if (user.getUsername().equals(userName)) {
-				 return user;
-			}
-		}
-		return null;
-	}
 	
 	// reads user information from the database (userInfo.csv file) and create & adds user object to arraylist
 	public ArrayList<User> readUsers() throws FileNotFoundException{
@@ -65,10 +54,11 @@ public class UserManager {
 				double gpa = Double.parseDouble(userDataInArray[3]);
 				int tuitionPreference = Integer.parseInt(userDataInArray[4]);
 				int sizePreference = Integer.parseInt(userDataInArray[5]);
-				Student student = new Student(username, role, sat, gpa, tuitionPreference, sizePreference);
+				String password = userDataInArray[6];
+				Student student = new Student(username, role, sat, gpa, tuitionPreference, sizePreference, password);
 				allUsers.add(student);
-				if (userDataInArray.length == 7) {
-					student.setSavedColleges(userDataInArray[6]);
+				if (userDataInArray.length == 8) {
+					student.setSavedColleges(userDataInArray[7]);
 				} 
 			} else {
 				String username = userDataInArray[0];
@@ -84,8 +74,8 @@ public class UserManager {
 	}
 		
 	//registers Student by adding them to total users list and by adding them to userInfo.csv file 
-	public void registerStudent(String userName, int role, int satScore, double gpa, int tuitionPreference, int sizePreference) throws IOException {
-		Student student = new Student(userName, role, satScore, gpa, tuitionPreference, sizePreference);
+	public void registerStudent(String userName, int role, int satScore, double gpa, int tuitionPreference, int sizePreference, String password) throws IOException {
+		Student student = new Student(userName, role, satScore, gpa, tuitionPreference, sizePreference, password);
 		users.add(student);
 		FileWriter writer = new FileWriter(filePath, true);
 		writer.append("\n");
@@ -100,6 +90,8 @@ public class UserManager {
 		writer.append(String.valueOf(tuitionPreference));
 		writer.append(",");
 		writer.append(String.valueOf(sizePreference));
+		writer.append(",");
+		writer.append(password);
 		writer.close();	
 	}
 	
