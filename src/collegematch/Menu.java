@@ -210,7 +210,7 @@ public class Menu {
 		String password = processStringBaseMethod("processUsername");
 		
 		collegeManager.displayAllColleges();
-		
+
 		while(true) {
 			System.out.println("Enter collegeID or enter 0 if your college is not on the list: ");
 			int collegeSelection = getIntInput();
@@ -236,7 +236,7 @@ public class Menu {
 				System.out.println("Enter college's tuition: ");
 				int tuition = processIntBaseMethod("processCollegeTuition");
 				
-				int collegeID = collegeManager.addCollege(collegeName, collegeSize, collegeStateCode, satScore, gpa, collegeNickName, tuition);
+				int collegeID = collegeManager.addCollege(collegeName, collegeSize, collegeStateCode, satScore, gpa, collegeNickName, tuition, 0);
 				userManager.registerAdmissionsOfficer(userName, password, 2, collegeID);
 				System.out.println("Registration successful. Transferring you to Welcome menu");
 				runWelcomeMenu();
@@ -253,6 +253,34 @@ public class Menu {
 		}
 		
 	}
+	
+	public void editCollege(int AdminID) throws Exception {
+		System.out.println("Enter a college name: ");
+		String collegeName = processStringBaseMethod("processCollegeName");
+		
+		System.out.println("Enter college size: ");
+		int collegeSize = processIntBaseMethod("processCollegeSize");
+		
+		System.out.println("Enter college State code: ");
+		String collegeStateCode = processStringBaseMethod("processCollegeLocation");
+		
+		System.out.println("Enter college's average SAT Score: ");
+		int satScore = processIntBaseMethod("processCollegeSATScore");
+		
+		System.out.println("Enter college's average GPA: ");
+		double gpa = processDoubleBaseMethod("processCollegeGPA");
+		
+		System.out.println("Enter college's nick name: ");
+		String collegeNickName = processStringBaseMethod("processCollegeNickname");
+		
+		System.out.println("Enter college's tuition: ");
+		int tuition = processIntBaseMethod("processCollegeTuition");
+		
+		collegeManager.addCollege(collegeName, collegeSize, collegeStateCode, satScore, gpa, collegeNickName, tuition, 0, AdminID);
+		System.out.println("Registration successful. Transferring you to Welcome menu");
+		runWelcomeMenu();
+	}
+	
 	
 	//start process methods to validate admission officer register inputs 
 	public int processCollegeTuition(int tuition) {
@@ -331,7 +359,8 @@ public class Menu {
 	public void displayAdmissionsOfficerMenu() {
 		System.out.println("Please select an option: ");
 		System.out.println("1. Display college information");
-		System.out.println("2. Sign out");
+		System.out.println("2. Update college information");
+		System.out.println("3. Sign out");
 	}
 	
 	//Processes the student selected option from student menu
@@ -435,6 +464,7 @@ public class Menu {
 				if (alreadySaved) {
 					System.out.println("College has already been saved.");
 				} else {
+					collegeToBeSaved.increamentSaves();
 					//saves college to local Student object savedColleges ArrayList
 					userManager.saveNewCollege(student, collegeToBeSaved);
 					//displays current saved colleges
@@ -509,9 +539,10 @@ public class Menu {
 		}
 	}
 	
-	//Processes the admission officer selected option
+	//Processes the admission officer selected option 											new
 	//1. Display college information
-	//2. Sign out 
+	//2. Delete college
+	//3. Sign out 
 	public void processAdmissionsOfficerMenu(int admissionsOfficerOption) throws Exception {
 		//casts current user as admission officer to call call methods from AdmissionsOfficer.java 
 		AdmissionsOfficer admissionsOfficer = (AdmissionsOfficer) currentUser; 
@@ -523,6 +554,12 @@ public class Menu {
 			System.out.println("");
 		//confirms whether admissions officer actually wants to sign out
 		} else if (admissionsOfficerOption == 2) {
+			int cid = admissionsOfficer.getCollegeID();
+			collegeManager.deleteCollege(admissionsOfficer.getCollegeID());
+			collegeManager.updateColleges();
+			editCollege(admissionsOfficer.getCollegeID());
+		//Delete college
+		}else if (admissionsOfficerOption == 3) {
 			signOut("admissionsOfficer");
 		//prints error message if one of admission officer menu options is not selected 
 		} else {
@@ -556,7 +593,6 @@ public class Menu {
 	
 	//reads in method name and user input types as Strings and invokes method on user input 
 	public void processBaseMethod (String varType, String processMethodName) throws Exception {
-		
 		if (varType.equals("int")) {
 			int varInt = getIntInput();
 			Method processMethod = this.getClass().getMethod(processMethodName, int.class);
@@ -603,5 +639,4 @@ public class Menu {
 		String notUsed = keyboardIn.nextLine();
 		return selected;
 	}
-	
 }

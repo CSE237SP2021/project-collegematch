@@ -9,9 +9,10 @@ public class College {
 	private double gpa;
 	private String collegeName2; //College Nickname
 	private int tuition;
+	private int numberOfSaves;
 
 	
-	public College(int collegeID, String collegeName, int size, String location, int satScore, double gpa, String collegeName2, int tuition) {
+	public College(int collegeID, String collegeName, int size, String location, int satScore, double gpa, String collegeName2, int tuition, int numberOfSaves) {
 		this.collegeID = collegeID;
 		this.collegeName = collegeName;
 		this.size = size;
@@ -20,6 +21,7 @@ public class College {
 		this.gpa = gpa;
 		this.collegeName2 = collegeName2;
 		this.tuition = tuition;
+		this.numberOfSaves = numberOfSaves;
 	}
 	
 	public void displayCollegeInformation() {
@@ -30,6 +32,7 @@ public class College {
 		System.out.println("Nick Name: " + collegeName2);
 		System.out.println("GPA: "+ gpa);
 		System.out.println("Tuition: $"+tuition);
+		System.out.println("Number of students, who saved you: "+numberOfSaves);
 	}
 	
 	public int getCollegeID() {
@@ -63,6 +66,12 @@ public class College {
 	public int getTuition() {
 		return tuition;
 	}
-
-
+	
+	public int getNumbeOfSaves() {
+		return numberOfSaves;
+	}
+	
+	public void increamentSaves() {
+		this.numberOfSaves=this.numberOfSaves+1;
+	}
 }

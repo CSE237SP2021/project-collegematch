@@ -17,5 +17,4 @@ public class AdmissionsOfficer extends User {
 	public String getPassword() {
 		return password;
 	}
-	
 }

@@ -127,9 +127,9 @@ public class UserManager {
 			if (userName.equals(userDataInArray[0])) {
 				String newLine = "";
 				//checks whether student has any saved colleges 
-				if (userDataInArray.length == 7) {
+				if (userDataInArray.length == 8) {
 					//if student does have saved colleges, rewrites the entire line 
-					userDataInArray[6] = student.getSavedCollegesStringList();
+					userDataInArray[7] = student.getSavedCollegesStringList();
 					for (String field : userDataInArray) {
 						newLine = newLine + field + ",";
 					}
