@@ -150,6 +150,12 @@ public class UserManager {
 		writer.append(fileContents);
 		writer.close();	
 	}	
+	
+//	public void updateSavedCollegeNumber(int collegeID) {
+//		for(User user: users) {
+//			user
+//		}
+//	}
 
 
 	public boolean checkForDuplicateUsername(String userName) {

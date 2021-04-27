@@ -142,7 +142,7 @@ public class CollegeManager {
 		writer.append(",");
 		writer.append(String.valueOf(tuition));
 		writer.append(",");
-		writer.append(String.valueOf(college.getNumbeOfSaves()));
+		writer.append(String.valueOf(numberOfSaves));
 		writer.close();
 		return collegeID;
 	}
@@ -170,7 +170,7 @@ public class CollegeManager {
 		writer.append(",");
 		writer.append(String.valueOf(tuition));
 		writer.append(",");
-		writer.append(String.valueOf(college.getNumbeOfSaves()));
+		writer.append(String.valueOf(numberOfSaves));
 		writer.close();
 	}
 	
@@ -268,8 +268,10 @@ public class CollegeManager {
 	
 	
 	public void displayAllColleges() {
-		for (int i = 1; i <= colleges.size(); i++) {
-			System.out.println(i + ". " + colleges.get(i-1).getCollegeName());
+		System.out.println("ID" + " College Name");
+		System.out.println();
+		for (College college : colleges) {
+			System.out.println(college.getCollegeID() + "  " + college.getCollegeName());
 		}
 	}
 	
