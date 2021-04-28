@@ -411,7 +411,6 @@ public class Menu {
 			int collegeSelection = getIntInput();
 			College collegeToBeRemoved = collegeManager.findCollege(collegeSelection);
 			//checks if student selects input correctly from list 
-			if (collegeSelection > 0 && collegeSelection <= savedColleges.size()) {
 				//deletes college from local Student object savedColleges ArrayList
 				userManager.deleteSavedCollege(student, collegeManager.findCollege(collegeSelection));
 				//displays current saved colleges 
@@ -428,9 +427,6 @@ public class Menu {
 				//deletes college from userInfo.csv file	
 				userManager.updateSavedCollegesInFile(student);
 				break;
-			} else {
-				System.out.println("Invalid college ID.");
-			}
 		}
 	}
 
@@ -554,7 +550,6 @@ public class Menu {
 		//allows admissions officer to reenter all college information
 		} else if (admissionsOfficerOption == 2) {
 			editCollege(admissionsOfficerCollege);
-//			collegeManager.deleteCollege(admissionsOfficer.getCollegeID());
 			collegeManager.updateColleges();
 		//confirms whether admissions officer actually wants to sign out
 		} else if (admissionsOfficerOption == 3) {
