@@ -24,3 +24,16 @@ This iteration, we got started on the admissions officer side and continued work
 
 In the next iteration, we plan to continue working on both the admission officer and the student side. On the admission officer side, we plan to allow admission officers to edit their school's information. We also plan to create a message board that students can visit and admission officers can add with exciting updates about their schools. Lastly, we plan to better handle errors from incorrect user inputs. 
 
+## Iteration 3
+
+This iteration, users login with usernames and passwords for more security. A sample username and password are provided below for a student and a college admissions officer for convenience, though you can still register as either a student or a college admissions officer. 
+
+Student 
+- username: mikib
+- password: mikibasu
+
+College Admissions Officer
+- username: washu_rep
+- password: washurules
+
+College admissions officers can view how many students saved their college to gauge interest and can now update their college information. Both students and college admissions officers can view a message board filled with updates, and college admission officers can also add to the message board. 
