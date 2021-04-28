@@ -1,13 +1,18 @@
 package collegematch;
-
-import java.io.*; 
-
-import java.util.Scanner;  
-
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.Writer;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.Arrays;
+import java.util.List;
 
 public class CollegeManager {
 	private ArrayList<College> colleges;
+	private Scanner scanner;
 	
 	public CollegeManager() {
 		try {
@@ -17,7 +22,7 @@ public class CollegeManager {
 		}
 	}
 	
-	
+	// reads college information from the database (college.csv file) and create & adds college object to arraylist
 	public ArrayList<College> readColleges() throws FileNotFoundException{
 		ArrayList<College> allColleges = new ArrayList<College>();
 		Scanner keyboardIn = new Scanner(new File("./src/collegematch/college.csv"));
@@ -25,21 +30,50 @@ public class CollegeManager {
 		while (keyboardIn.hasNextLine())
 		{
 			String[] collegeDataInArray = keyboardIn.nextLine().split(",");
-			int collegeID = Integer.parseInt(collegeDataInArray[0]);
-			String collegeName = collegeDataInArray[1];
-			int size = Integer.parseInt(collegeDataInArray[2]);
-			String state = collegeDataInArray[3];
-			int sat = Integer.parseInt(collegeDataInArray[4]);
-			double gpa = Double.parseDouble(collegeDataInArray[5]);
-			String nickname = collegeDataInArray[6];
-			int tuition = Integer.parseInt(collegeDataInArray[7]);
-			allColleges.add(new College(collegeID, collegeName, size, state, sat, gpa, nickname, tuition));
+			if(collegeDataInArray.length == 9) {
+				int collegeID = Integer.parseInt(collegeDataInArray[0]);
+				String collegeName = collegeDataInArray[1];
+				int size = Integer.parseInt(collegeDataInArray[2]);
+				String state = collegeDataInArray[3];
+				int sat = Integer.parseInt(collegeDataInArray[4]);
+				double gpa = Double.parseDouble(collegeDataInArray[5]);
+				String nickname = collegeDataInArray[6];
+				int tuition = Integer.parseInt(collegeDataInArray[7]);
+				int numberOfSaves = Integer.parseInt(collegeDataInArray[8]);
+				allColleges.add(new College(collegeID, collegeName, size, state, sat, gpa, nickname, tuition, numberOfSaves));
+			}
 		}
 		keyboardIn.close();
 		return allColleges;
 	}
 	
-
+	//rewrites the updated arraylist in college.csv  											
+	public void updateColleges() throws IOException{
+		FileWriter writer = new FileWriter("./src/collegematch/college.csv", false);
+		for (int i = 0; i < colleges.size(); i++) {
+			if (i != 0) {
+				writer.append("\n");
+			}
+			writer.append(String.valueOf(colleges.get(i).getCollegeID()));
+			writer.append(",");
+			writer.append(colleges.get(i).getCollegeName());
+			writer.append(",");
+			writer.append(String.valueOf(colleges.get(i).getSize()));
+			writer.append(",");
+			writer.append(colleges.get(i).getLocation());
+			writer.append(",");
+			writer.append(String.valueOf(colleges.get(i).getSatScore()));
+			writer.append(",");
+			writer.append(String.valueOf(colleges.get(i).getGpa()));
+			writer.append(",");
+			writer.append(colleges.get(i).getCollegeName2());
+			writer.append(",");
+			writer.append(String.valueOf(colleges.get(i).getTuition()));
+			writer.append(",");
+			writer.append(String.valueOf(colleges.get(i).getNumbeOfSaves()));
+		}
+		writer.close();
+	}
 	
 	//find colleges by college names
 	public void searchCollege(String collegeName) {
@@ -48,9 +82,7 @@ public class CollegeManager {
 			if (college.getCollegeName().contains(collegeName)) {
 				college.displayCollegeInformation();
 				collegeNotFound = false;
-			}
-			// search for alternative name
-			if (college.getCollegeName2().contains(collegeName)) {
+			} else if (college.getCollegeName2().contains(collegeName)) {
 				college.displayCollegeInformation();
 				collegeNotFound = false;
 			}
@@ -60,10 +92,10 @@ public class CollegeManager {
 		}
 	}
 
-	//adds college to colleges ArrayList and adds college to college.csv
-	public int addCollege(String collegeName, int size, String location, int satScore, double gpa, String collegeName2, int tuition) throws IOException {
+	//adds college to colleges ArrayList and adds college to end of college.csv
+	public int addCollege(String collegeName, int size, String location, int satScore, double gpa, String collegeName2, int tuition, int numberOfSaves) throws IOException {
 		int collegeID = colleges.size() + 1;
-		College college = new College(collegeID, collegeName, size, location, satScore, gpa, collegeName2, tuition);
+		College college = new College(collegeID, collegeName, size, location, satScore, gpa, collegeName2, tuition, numberOfSaves);
 		colleges.add(college);
 		FileWriter writer = new FileWriter("./src/collegematch/college.csv", true);
 
@@ -83,7 +115,16 @@ public class CollegeManager {
 		writer.append(collegeName2);
 		writer.append(",");
 		writer.append(String.valueOf(tuition));
+		writer.append(",");
+		writer.append(String.valueOf(numberOfSaves));
 		writer.close();
+		return collegeID;
+	}
+	
+	//delete college from college.csv, and therefore delete college from the System 			new
+	public int deleteCollege(int collegeID) throws IOException {
+		//int index=collegeID-1;
+		colleges.remove(collegeID-1);
 		return collegeID;
 	}
 	
@@ -165,8 +206,10 @@ public class CollegeManager {
 	
 	
 	public void displayAllColleges() {
-		for (int i = 1; i <= colleges.size(); i++) {
-			System.out.println(i + ". " + colleges.get(i-1).getCollegeName());
+		System.out.println("ID" + " College Name");
+		System.out.println();
+		for (College college : colleges) {
+			System.out.println(college.getCollegeID() + "  " + college.getCollegeName());
 		}
 	}
 	

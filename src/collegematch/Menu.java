@@ -11,11 +11,13 @@ public class Menu {
 	private UserManager userManager;
 	private User currentUser;
 	private CollegeManager collegeManager;
+	private MessageBoard messageBoard;
 	
 	public Menu() {
 		keyboardIn = new Scanner(System.in);
 		this.userManager = new UserManager();
 		this.collegeManager = new CollegeManager();
+		this.messageBoard = new MessageBoard();
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -61,9 +63,14 @@ public class Menu {
 	public void runLoginMenu() throws Exception {
 		System.out.println("Enter username: ");
 		String userName = keyboardIn.nextLine();
-		currentUser = userManager.logIn(userName);
+		System.out.println("Enter password: ");
+		String password = keyboardIn.nextLine();
+
+		currentUser = userManager.logIn(userName, password);
+
 		processLoginMenu();	
 	}
+	
 
 	public void processLoginMenu() throws Exception {
 		if(currentUser != null) {
@@ -130,6 +137,9 @@ public class Menu {
 		System.out.println("Enter a username: ");
 		String userName = processStringBaseMethod("processUsername");
 		
+		System.out.println("Enter a password: ");
+		String password = processStringBaseMethod("processUsername");
+		
 		System.out.println("Enter your SAT Score: ");
 		int satScore = processIntBaseMethod("processSATScore");
 		
@@ -142,8 +152,9 @@ public class Menu {
 		System.out.println("Enter maximum campus size preference (value must be between 10 and 60000): ");
 		int sizePreference = processIntBaseMethod("processSizePreference");
 		
-		userManager.registerStudent(userName, 1, satScore, gpa, tuitionPreference, sizePreference);
+		userManager.registerStudent(userName, 1, satScore, gpa, tuitionPreference, sizePreference, password);
 		System.out.println("Registration successful. Transferring you to Welcome menu");
+
 		runWelcomeMenu();
 	}
 
@@ -197,8 +208,11 @@ public class Menu {
 		System.out.println("Enter a username: ");
 		String userName = processStringBaseMethod("processUsername");
 		
-		collegeManager.displayAllColleges();
+		System.out.println("Enter a password: ");
+		String password = processStringBaseMethod("processUsername");
 		
+		collegeManager.displayAllColleges();
+
 		while(true) {
 			System.out.println("Enter collegeID or enter 0 if your college is not on the list: ");
 			int collegeSelection = getIntInput();
@@ -224,8 +238,8 @@ public class Menu {
 				System.out.println("Enter college's tuition: ");
 				int tuition = processIntBaseMethod("processCollegeTuition");
 				
-				int collegeID = collegeManager.addCollege(collegeName, collegeSize, collegeStateCode, satScore, gpa, collegeNickName, tuition);
-				userManager.registerAdmissionsOfficer(userName, 2, collegeID);
+				int collegeID = collegeManager.addCollege(collegeName, collegeSize, collegeStateCode, satScore, gpa, collegeNickName, tuition, 0);
+				userManager.registerAdmissionsOfficer(userName, password, 2, collegeID);
 				System.out.println("Registration successful. Transferring you to Welcome menu");
 				runWelcomeMenu();
 			} else {
@@ -233,7 +247,7 @@ public class Menu {
 				if (collegeToBeSaved == null) {
 					System.out.println("Invalid college ID.");
 				} else {
-					userManager.registerAdmissionsOfficer(userName, 2, collegeSelection);
+					userManager.registerAdmissionsOfficer(userName, password, 2, collegeSelection);
 					System.out.println("Registration successful. Transferring you to Welcome menu");
 					runWelcomeMenu();
 				}
@@ -313,13 +327,17 @@ public class Menu {
 		System.out.println("2. Edit saved colleges");
 		System.out.println("3. Get college matches");
 		System.out.println("4. Search college database");
-		System.out.println("5. Sign out");
+		System.out.println("5. Display message board");
+		System.out.println("6. Sign out");
 	}
 	
 	public void displayAdmissionsOfficerMenu() {
 		System.out.println("Please select an option: ");
 		System.out.println("1. Display college information");
-		System.out.println("2. Sign out");
+		System.out.println("2. Update college information");
+		System.out.println("3. Display message board");
+		System.out.println("4. Add to message board");
+		System.out.println("5. Sign out");
 	}
 	
 	//Processes the student selected option from student menu
@@ -327,7 +345,8 @@ public class Menu {
 	//2. Edit saved colleges
 	//3. Get college matches
 	//4. Search college database
-	//5. Sign out
+	//5. Display event board
+	//6. Sign out
 	public void processStudentMenu(int studentOption) throws Exception {
 		//cases current user as Student to pass student object to methods in UserManager.java
 		//follows Law of Demeter because no method is directly called on currentUser
@@ -354,7 +373,9 @@ public class Menu {
 			System.out.println("");
 			collegeManager.searchCollege(collegeName);
 			System.out.println("");
-		} else if (studentOption == 5) { 
+		} else if (studentOption == 5) {
+			messageBoard.displayMessageBoard();
+		} else if (studentOption == 6) { 
 			signOut("student");
 		} else {
 			System.out.println("");
@@ -388,10 +409,11 @@ public class Menu {
 		while(true) {
 			System.out.println("Enter one collegeID to delete: ");
 			int collegeSelection = getIntInput();
+			College collegeToBeRemoved = collegeManager.findCollege(collegeSelection);
 			//checks if student selects input correctly from list 
-			if (collegeSelection > 0 && collegeSelection <= savedColleges.size()) {
+//			if (collegeSelection > 0 && collegeSelection <= savedColleges.size()) {
 				//deletes college from local Student object savedColleges ArrayList
-				userManager.deleteSavedCollege(student, savedColleges.get(collegeSelection - 1));
+				userManager.deleteSavedCollege(student, collegeManager.findCollege(collegeSelection));
 				//displays current saved colleges 
 				ArrayList<College> newSavedColleges = userManager.getUserSavedCollegeList(student);
 				if (newSavedColleges.size() == 0) {
@@ -399,12 +421,14 @@ public class Menu {
 				} else {
 					displaySavedColleges(newSavedColleges);
 				}	
+				//decrements student saves in local college object
+				collegeToBeRemoved.decrementSaves();
+				//rewrites college.csv class
+				collegeManager.updateColleges();
 				//deletes college from userInfo.csv file	
 				userManager.updateSavedCollegesInFile(student);
 				break;
-			} else {
-				System.out.println("Invalid college ID.");
-			}
+//			} 
 		}
 	}
 
@@ -412,11 +436,11 @@ public class Menu {
 			throws FileNotFoundException, IOException {
 		collegeManager.displayAllColleges();
 		while(true) {
-			System.out.println("Enter one collegeID to save: ");
+			System.out.println("Enter one ID to save: ");
 			int collegeSelection = getIntInput();
 			College collegeToBeSaved = collegeManager.findCollege(collegeSelection);
 			if (collegeToBeSaved == null) {
-				System.out.println("Invalid college ID.");
+				System.out.println("Invalid ID.");
 			} else {
 				//prevent user from adding a saved college again 
 				boolean alreadySaved = checkCollegeAlreadySaved(savedColleges, collegeToBeSaved);
@@ -430,6 +454,10 @@ public class Menu {
 					displaySavedColleges(newSavedColleges);
 					//adds new college to userInfo.csv file	
 					userManager.updateSavedCollegesInFile(student);
+					//increments student saves in local college object
+					collegeToBeSaved.incrementSaves();
+					//rewrites college.csv class
+					collegeManager.updateColleges();
 					break;
 				}
 			}
@@ -451,11 +479,11 @@ public class Menu {
 		System.out.println("");
 		collegeManager.displayAllColleges();
 		while(true) {
-			System.out.println("You currently have no saved colleges. Enter one collegeID to save: ");
+			System.out.println("You currently have no saved colleges. Enter one ID to save: ");
 			int collegeSelection = getIntInput();
 			College collegeToBeSaved = collegeManager.findCollege(collegeSelection);
 			if (collegeToBeSaved == null) {
-				System.out.println("Invalid college ID.");
+				System.out.println("Invalid ID.");
 			} else {
 				//saves college to local Student object savedColleges ArrayList
 				userManager.saveNewCollege(student, collegeToBeSaved);
@@ -464,6 +492,10 @@ public class Menu {
 				displaySavedColleges(newSavedColleges);
 				//adds new college to userInfo.csv file 
 				userManager.updateSavedCollegesInFile(student);
+				//increments student saves in local college object
+				collegeToBeSaved.incrementSaves();
+				//rewrites college.csv class
+				collegeManager.updateColleges();
 				break;
 			}
 		}
@@ -475,8 +507,12 @@ public class Menu {
 			System.out.println("You have no saved colleges");
 		} else {
 			System.out.println("Your current saved colleges are: ");
-			for (int i = 1; i <= savedColleges.size(); i++) {
-				System.out.println(i + ". " + (savedColleges.get(i-1)).getCollegeName());
+			System.out.println();
+			System.out.println("ID" + " College Name");
+			System.out.println();
+
+			for (College savedCollege : savedColleges) {
+				System.out.println(savedCollege.getCollegeID() + "  " + savedCollege.getCollegeName());
 			}
 		}
 		System.out.println("");
@@ -497,20 +533,34 @@ public class Menu {
 		}
 	}
 	
-	//Processes the admission officer selected option
+	//Processes the admission officer selected option 											new
 	//1. Display college information
-	//2. Sign out 
+	//2. Update college information
+	//3. Display event board
+	//4. Add to event board
+	//5. Sign out 
 	public void processAdmissionsOfficerMenu(int admissionsOfficerOption) throws Exception {
 		//casts current user as admission officer to call call methods from AdmissionsOfficer.java 
 		AdmissionsOfficer admissionsOfficer = (AdmissionsOfficer) currentUser; 
+		College admissionsOfficerCollege = collegeManager.findCollege(admissionsOfficer.getCollegeID());
 		//displays college info associated with admissions officer 
 		if (admissionsOfficerOption == 1) {
-			College collegeToBeDisplayed = collegeManager.findCollege(admissionsOfficer.getCollegeID());
 			System.out.println("");
-			collegeToBeDisplayed.displayCollegeInformation();
+			admissionsOfficerCollege.displayCollegeInformation();
+			admissionsOfficerCollege.displayNumberOfSaves();
 			System.out.println("");
-		//confirms whether admissions officer actually wants to sign out
+		//allows admissions officer to reenter all college information
 		} else if (admissionsOfficerOption == 2) {
+			editCollege(admissionsOfficerCollege);
+//			collegeManager.deleteCollege(admissionsOfficer.getCollegeID());
+			collegeManager.updateColleges();
+		//confirms whether admissions officer actually wants to sign out
+		} else if (admissionsOfficerOption == 3) {
+			messageBoard.displayMessageBoard();
+		} else if (admissionsOfficerOption == 4) {
+			Message message = getEventDetails();
+			messageBoard.addToMessageBoard(message);
+		} else if (admissionsOfficerOption == 5) {
 			signOut("admissionsOfficer");
 		//prints error message if one of admission officer menu options is not selected 
 		} else {
@@ -518,6 +568,52 @@ public class Menu {
 			System.out.println("Incorrect input.");
 			System.out.println("");
 		}
+	}
+	
+	public Message getEventDetails() throws Exception {
+		System.out.println("Enter message title: ");
+		String messageName = keyboardIn.nextLine();
+		
+		
+		System.out.println("Enter message description: ");
+		String messageDescription = keyboardIn.nextLine();
+		
+		Message message = new Message(messageName, messageDescription);
+		return message;
+	}
+	
+	
+	public void editCollege(College college) throws Exception {
+		
+		System.out.println("Renter college name: ");
+		String collegeName = keyboardIn.nextLine();
+		college.setCollegeName(collegeName);
+		
+		System.out.println("Enter college size: ");
+		int collegeSize = processIntBaseMethod("processCollegeSize");
+		college.setSize(collegeSize);
+		
+		System.out.println("Enter college State code: ");
+		String collegeStateCode = processStringBaseMethod("processCollegeLocation");
+		college.setLocation(collegeStateCode);
+		
+		System.out.println("Enter college's average SAT Score: ");
+		int satScore = processIntBaseMethod("processCollegeSATScore");
+		college.setSatScore(satScore);
+		
+		System.out.println("Enter college's average GPA: ");
+		double gpa = processDoubleBaseMethod("processCollegeGPA");
+		college.setGpa(gpa);
+		
+		System.out.println("Enter college's nick name: ");
+		String collegeNickName = keyboardIn.nextLine();;
+		college.setCollegeName2(collegeNickName);
+		
+		System.out.println("Enter college's tuition: ");
+		int tuition = processIntBaseMethod("processCollegeTuition");
+		college.setTuition(tuition);
+		
+		System.out.println("College information sucessfully updated.");
 	}
 	
 	//confirms user sign out 
@@ -544,7 +640,6 @@ public class Menu {
 	
 	//reads in method name and user input types as Strings and invokes method on user input 
 	public void processBaseMethod (String varType, String processMethodName) throws Exception {
-		
 		if (varType.equals("int")) {
 			int varInt = getIntInput();
 			Method processMethod = this.getClass().getMethod(processMethodName, int.class);
@@ -591,5 +686,4 @@ public class Menu {
 		String notUsed = keyboardIn.nextLine();
 		return selected;
 	}
-	
 }

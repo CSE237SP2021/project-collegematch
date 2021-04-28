@@ -22,14 +22,21 @@ public class UserManager {
 	}
 	
 	// checks if entered user name exists in database and returns the object, else returns null
-	public User logIn(String userName) {
+	public User logIn(String userName, String password) {
 		for (User user: users) {
 			if (user.getUsername().equals(userName)) {
-				return user;
-			}
+
+					if(user.getPassword().equals(password)) {
+						return user;
+					}
+					else {
+						System.out.println("Incorrect password.");
+					}
+			} 
 		}
 		return null;
 	}
+	
 	
 	// reads user information from the database (userInfo.csv file) and create & adds user object to arraylist
 	public ArrayList<User> readUsers() throws FileNotFoundException{
@@ -47,16 +54,18 @@ public class UserManager {
 				double gpa = Double.parseDouble(userDataInArray[3]);
 				int tuitionPreference = Integer.parseInt(userDataInArray[4]);
 				int sizePreference = Integer.parseInt(userDataInArray[5]);
-				Student student = new Student(username, role, sat, gpa, tuitionPreference, sizePreference);
+				String password = userDataInArray[6];
+				Student student = new Student(username, role, sat, gpa, tuitionPreference, sizePreference, password);
 				allUsers.add(student);
-				if (userDataInArray.length == 7) {
-					student.setSavedColleges(userDataInArray[6]);
+				if (userDataInArray.length == 8) {
+					student.setSavedColleges(userDataInArray[7]);
 				} 
 			} else {
 				String username = userDataInArray[0];
+				String password = userDataInArray[3];
 				int role = Integer.parseInt(userDataInArray[1]);
 				int collegeID = Integer.parseInt(userDataInArray[2]);
-				allUsers.add(new AdmissionsOfficer(username, role, collegeID));
+				allUsers.add(new AdmissionsOfficer(username, password, role, collegeID));
 			}
 			
 		}
@@ -65,8 +74,8 @@ public class UserManager {
 	}
 		
 	//registers Student by adding them to total users list and by adding them to userInfo.csv file 
-	public void registerStudent(String userName, int role, int satScore, double gpa, int tuitionPreference, int sizePreference) throws IOException {
-		Student student = new Student(userName, role, satScore, gpa, tuitionPreference, sizePreference);
+	public void registerStudent(String userName, int role, int satScore, double gpa, int tuitionPreference, int sizePreference, String password) throws IOException {
+		Student student = new Student(userName, role, satScore, gpa, tuitionPreference, sizePreference, password);
 		users.add(student);
 		FileWriter writer = new FileWriter(filePath, true);
 		writer.append("\n");
@@ -81,12 +90,14 @@ public class UserManager {
 		writer.append(String.valueOf(tuitionPreference));
 		writer.append(",");
 		writer.append(String.valueOf(sizePreference));
+		writer.append(",");
+		writer.append(password);
 		writer.close();	
 	}
 	
 	//registers Admission Officer by adding them to total list of users and by adding them to userInfo.csv file 
-	public void registerAdmissionsOfficer(String userName, int role, int collegeID) throws IOException {
-		AdmissionsOfficer admissionsOfficer = new AdmissionsOfficer(userName, role, collegeID);
+	public void registerAdmissionsOfficer(String userName,  String password, int role, int collegeID) throws IOException {
+		AdmissionsOfficer admissionsOfficer = new AdmissionsOfficer(userName, password, role, collegeID);
 		users.add(admissionsOfficer);
 		FileWriter writer = new FileWriter(filePath, true);
 		writer.append("\n");
@@ -95,6 +106,8 @@ public class UserManager {
 		writer.append(String.valueOf(role));
 		writer.append(",");
 		writer.append(String.valueOf(collegeID));
+		writer.append(",");
+		writer.append(password);
 		writer.close();	
 	}
 	
@@ -114,9 +127,9 @@ public class UserManager {
 			if (userName.equals(userDataInArray[0])) {
 				String newLine = "";
 				//checks whether student has any saved colleges 
-				if (userDataInArray.length == 7) {
+				if (userDataInArray.length == 8) {
 					//if student does have saved colleges, rewrites the entire line 
-					userDataInArray[6] = student.getSavedCollegesStringList();
+					userDataInArray[7] = student.getSavedCollegesStringList();
 					for (String field : userDataInArray) {
 						newLine = newLine + field + ",";
 					}

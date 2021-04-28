@@ -1,9 +1,7 @@
-batman,1,1600,4,60000,10000
-anamika,1,1500,3.9,60000,1000
-dan,1,1100,3,500,500
-mikib,1,1400,3.9,100,100
-harvard_rep,2,2,,,
-kansas_rep,2,22,,,
-god,1,1600,4,100000,60000
-doug,1,1400,3.2,300,3000
-emory_rep,2,23,,,
+harvard_rep,2,2,h,,,,
+a,1,1200,3,100,10,b,1-
+testAdmissionsRep,2,16,password,,,,
+batman,1,1600,4,150,20,namtab,17-
+washu_rep,2,17,washurules,,,,
+emory_rep,2,23,emory,,,,
+mikib,1,1520,3.87,20000,50000,mikibasu,

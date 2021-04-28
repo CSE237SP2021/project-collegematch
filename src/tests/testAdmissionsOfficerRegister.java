@@ -18,7 +18,7 @@ class testAdmissionsOfficerRegister {
 	@Test
 	void testRegister() throws IOException {
 		UserManager userManager = new UserManager();
-		userManager.registerAdmissionsOfficer("testAdmissionsRep", 2, 16);
+		userManager.registerAdmissionsOfficer("testAdmissionsRep", "password", 2, 16);
 		ArrayList<User> allUsers = userManager.readUsers();
 		boolean match = false;
 		for(User user : allUsers) {
@@ -32,7 +32,7 @@ class testAdmissionsOfficerRegister {
 	@Test
 	void testAddCollege() throws IOException {
 		CollegeManager collegeManager = new CollegeManager();
-		int collegeID = collegeManager.addCollege("Test University", 3000, "NA", 1400, 1.0, "Test", 100);
+		int collegeID = collegeManager.addCollege("Test University", 3000, "NA", 1400, 1.0, "Test", 100, 0);
 		assertEquals(collegeManager.getCollegesLength(), collegeID);
 	}
 	
