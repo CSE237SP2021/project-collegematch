@@ -12,15 +12,29 @@ class testLogin {
 	@Test
 	void testStudentLoginSuccessful() {
 		UserManager UserManager = new UserManager();
-		User outputUserObject = UserManager.logIn("batman");
+		User outputUserObject = UserManager.logIn("mikib", "mikibasu");
 		assertTrue(outputUserObject != null);
 	}
 	
 	@Test
 	void testAdmissionOfficerLoginSuccessful() {
 		UserManager UserManager = new UserManager();
-		User outputUserObject = UserManager.logIn("harvard_rep");
+		User outputUserObject = UserManager.logIn("emory_rep", "emory");
 		assertTrue(outputUserObject != null);
+	}
+	
+	@Test
+	void testStudentLoginUnSuccessful() {
+		UserManager UserManager = new UserManager();
+		User outputUserObject = UserManager.logIn("a", "c");
+		assertTrue(outputUserObject == null);
+	}
+	
+	@Test
+	void testAdmissionOfficerLoginUnSuccessful() {
+		UserManager UserManager = new UserManager();
+		User outputUserObject = UserManager.logIn("lol", "c");
+		assertTrue(outputUserObject == null);
 	}
 
 	

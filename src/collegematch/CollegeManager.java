@@ -22,6 +22,7 @@ public class CollegeManager {
 		}
 	}
 	
+	// reads college information from the database (college.csv file) and create & adds college object to arraylist
 	public ArrayList<College> readColleges() throws FileNotFoundException{
 		ArrayList<College> allColleges = new ArrayList<College>();
 		Scanner keyboardIn = new Scanner(new File("./src/collegematch/college.csv"));
@@ -46,57 +47,32 @@ public class CollegeManager {
 		return allColleges;
 	}
 	
-//	public ArrayList<College> readColleges() throws FileNotFoundException{
-//		ArrayList<College> allColleges = new ArrayList<College>();
-//		Scanner keyboardIn = new Scanner(new File("./src/collegematch/college.csv"));
-//		keyboardIn.useDelimiter("/n");
-//		while (keyboardIn.hasNextLine())
-//		{
-//			String[] collegeDataInArray = keyboardIn.nextLine().split(",");
-//			int collegeID = Integer.parseInt(collegeDataInArray[0]);
-//			String collegeName = collegeDataInArray[1];
-//			int size = Integer.parseInt(collegeDataInArray[2]);
-//			String state = collegeDataInArray[3];
-//			int sat = Integer.parseInt(collegeDataInArray[4]);
-//			double gpa = Double.parseDouble(collegeDataInArray[5]);
-//			String nickname = collegeDataInArray[6];
-//			int tuition = Integer.parseInt(collegeDataInArray[7]);
-//			int numberOfSaves = Integer.parseInt(collegeDataInArray[8]);
-//			allColleges.add(new College(collegeID, collegeName, size, state, sat, gpa, nickname, tuition, numberOfSaves));
-//		}
-//		keyboardIn.close();
-//		return allColleges;
-//	}
-	
-	//write the updated arraylist in college.csv  											
-	public ArrayList<College> updateColleges() throws IOException{
-
-		ArrayList<College> allColleges = new ArrayList<College>();
+	//rewrites the updated arraylist in college.csv  											
+	public void updateColleges() throws IOException{
 		FileWriter writer = new FileWriter("./src/collegematch/college.csv", false);
-
-		for (College college : colleges) {
-			writer.append("\n");
-			writer.append(String.valueOf(college.getCollegeID()));
+		for (int i = 0; i < colleges.size(); i++) {
+			if (i != 0) {
+				writer.append("\n");
+			}
+			writer.append(String.valueOf(colleges.get(i).getCollegeID()));
 			writer.append(",");
-			writer.append(college.getCollegeName());
+			writer.append(colleges.get(i).getCollegeName());
 			writer.append(",");
-			writer.append(String.valueOf(college.getSize()));
+			writer.append(String.valueOf(colleges.get(i).getSize()));
 			writer.append(",");
-			writer.append(college.getLocation());
+			writer.append(colleges.get(i).getLocation());
 			writer.append(",");
-			writer.append(String.valueOf(college.getSatScore()));
+			writer.append(String.valueOf(colleges.get(i).getSatScore()));
 			writer.append(",");
-			writer.append(String.valueOf(college.getGpa()));
+			writer.append(String.valueOf(colleges.get(i).getGpa()));
 			writer.append(",");
-			writer.append(college.getCollegeName2());
+			writer.append(colleges.get(i).getCollegeName2());
 			writer.append(",");
-			writer.append(String.valueOf(college.getTuition()));
+			writer.append(String.valueOf(colleges.get(i).getTuition()));
 			writer.append(",");
-			writer.append(String.valueOf(college.getNumbeOfSaves()));
-			allColleges.add(college);
+			writer.append(String.valueOf(colleges.get(i).getNumbeOfSaves()));
 		}
 		writer.close();
-		return allColleges;
 	}
 	
 	//find colleges by college names
@@ -106,9 +82,7 @@ public class CollegeManager {
 			if (college.getCollegeName().contains(collegeName)) {
 				college.displayCollegeInformation();
 				collegeNotFound = false;
-			}
-			// search for alternative name
-			if (college.getCollegeName2().contains(collegeName)) {
+			} else if (college.getCollegeName2().contains(collegeName)) {
 				college.displayCollegeInformation();
 				collegeNotFound = false;
 			}
@@ -118,7 +92,7 @@ public class CollegeManager {
 		}
 	}
 
-	//adds college to colleges ArrayList and adds college to college.csv
+	//adds college to colleges ArrayList and adds college to end of college.csv
 	public int addCollege(String collegeName, int size, String location, int satScore, double gpa, String collegeName2, int tuition, int numberOfSaves) throws IOException {
 		int collegeID = colleges.size() + 1;
 		College college = new College(collegeID, collegeName, size, location, satScore, gpa, collegeName2, tuition, numberOfSaves);
@@ -147,50 +121,6 @@ public class CollegeManager {
 		return collegeID;
 	}
 
-	//adds college to colleges ArrayList and adds college to college.csv
-	public void addCollege(String collegeName, int size, String location, int satScore, double gpa, String collegeName2, int tuition, int numberOfSaves, int collegeID) throws IOException {
-		College college = new College(collegeID, collegeName, size, location, satScore, gpa, collegeName2, tuition, numberOfSaves);
-		colleges.add(college);
-		FileWriter writer = new FileWriter("./src/collegematch/college.csv", true);
-
-		writer.append("\n");
-		writer.append(String.valueOf(collegeID));
-		writer.append(",");
-		writer.append(collegeName);
-		writer.append(",");
-		writer.append(String.valueOf(size));
-		writer.append(",");
-		writer.append(location);
-		writer.append(",");
-		writer.append(String.valueOf(satScore));
-		writer.append(",");
-		writer.append(String.valueOf(gpa));
-		writer.append(",");
-		writer.append(collegeName2);
-		writer.append(",");
-		writer.append(String.valueOf(tuition));
-		writer.append(",");
-		writer.append(String.valueOf(numberOfSaves));
-		writer.close();
-	}
-	
-	//delete college from college.csv, and therefore delete college from the System 			new
-	public int deleteCollege(int collegeID) throws IOException {
-		//int index=collegeID-1;
-		colleges.remove(collegeID-1);
-		return collegeID;
-	}
-	
-	//returns College object when given college name 											new
-	public College findCollegeStr (String collegeName) {
-		for (College college : colleges) {
-			if (collegeName == college.getCollegeName()) {
-				return college;
-			}
-		}
-		return null;
-	}
-	
 	//returns College object when given collegeID
 	public College findCollege (int collegeID) {
 		for (College college : colleges) {

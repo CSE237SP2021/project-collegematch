@@ -16,7 +16,7 @@ class testStudentRegister {
 	@Test
 	void testRegister() throws IOException {
 		UserManager userManager = new UserManager();
-		userManager.registerStudent("testUser", 1, 1100, 3.0, 10000,1000);
+		userManager.registerStudent("testUser", 1, 1100, 3.0, 10000,1000, "password");
 		ArrayList<User> allUsers = userManager.readUsers();
 		boolean match = false;
 		for(User user : allUsers) {

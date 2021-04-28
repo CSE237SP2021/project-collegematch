@@ -32,7 +32,17 @@ public class College {
 		System.out.println("Nick Name: " + collegeName2);
 		System.out.println("GPA: "+ gpa);
 		System.out.println("Tuition: $"+tuition);
-		System.out.println("Number of students, who saved you: "+numberOfSaves);
+	}
+	
+	public void displayNumberOfSaves() {
+		System.out.println("Number of students interested: "+ numberOfSaves);
+	}
+	
+	public void incrementSaves() {
+		this.numberOfSaves = this.numberOfSaves + 1;
+	}
+	public void decrementSaves() {
+		this.numberOfSaves = this.numberOfSaves - 1;
 	}
 	
 	public int getCollegeID() {
@@ -71,10 +81,31 @@ public class College {
 		return numberOfSaves;
 	}
 	
-	public void increamentSaves() {
-		this.numberOfSaves = this.numberOfSaves + 1;
+	public void setCollegeName(String newCollegeName) {
+		collegeName = newCollegeName;
 	}
-	public void decrementSaves() {
-		this.numberOfSaves = this.numberOfSaves - 1;
+
+	public void setSize(int newSize) {
+		size = newSize;
+	}
+
+	public void setLocation(String newLocation) {
+		location = newLocation;
+	}
+
+	public void setSatScore(int newSATScore) {
+		satScore = newSATScore;
+	}
+
+	public void setGpa(double newGPA) {
+		gpa = newGPA;
+	}
+	
+	public void setCollegeName2(String newCollegeNickname) {
+		collegeName2 = newCollegeNickname;
+	}
+
+	public void setTuition(int newTuition) {
+		tuition = newTuition;
 	}
 }

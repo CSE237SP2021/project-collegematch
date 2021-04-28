@@ -16,7 +16,7 @@ public class testSavedColleges {
 	
 	@Test 
 	void testSetSavedColleges() {
-		Student student = new Student("bob", 1, 1250, 3.5, 20000, 20000);
+		Student student = new Student("bob", 1, 1250, 3.5, 20000, 20000, "password");
 		student.setSavedColleges("1-2-3-");
 		assertEquals(3, student.getSavedCollegesSize());
 	}
@@ -31,7 +31,7 @@ public class testSavedColleges {
 	@Test 
 	void testAddToSavedColleges() {
 		CollegeManager collegeManager = new CollegeManager();
-		Student student = new Student("bob", 1, 1250, 3.5, 20000, 20000);
+		Student student = new Student("bob", 1, 1250, 3.5, 20000, 20000, "password");
 		student.setSavedColleges("1-2-3-");
 		College collegeToBeAdded = collegeManager.findCollege(4);
 		student.saveNewCollege(collegeToBeAdded);
@@ -41,19 +41,17 @@ public class testSavedColleges {
 	@Test 
 	void testDeleteFromSavedColleges() {
 		CollegeManager collegeManager = new CollegeManager();
-		Student student = new Student("bob", 1, 1250, 3.5, 20000, 20000);
+		Student student = new Student("bob", 1, 1250, 3.5, 20000, 20000, "password");
 		student.setSavedColleges("1-2-3-");
-		System.out.println(student.getSavedCollegesSize());
 		College collegeToBeRemoved = collegeManager.findCollege(3);
 		student.deleteSavedCollege(collegeToBeRemoved);
-		System.out.println(student.getSavedCollegesSize());
 		assertEquals(2, student.getSavedCollegesSize());
 	}
 	
 	
 	@Test
 	void testGetSavedCollegeStringList() {
-		Student student = new Student("bob", 1, 1250, 3.5, 20000, 20000);
+		Student student = new Student("bob", 1, 1250, 3.5, 20000, 20000, "password");
 		student.setSavedColleges("1-2-3-");
 		String collegeList = student.getSavedCollegesStringList();
 		assertEquals("1-2-3-", collegeList);
