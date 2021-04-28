@@ -6,8 +6,7 @@ CollegeMatch is a Java application that helps students find the college of their
 
 **To run our application, run the following commands after cloning the repository**
 1. cd project-collegematch
-2. git checkout development 
-3. bash runCollegeMatch.sh 
+2. bash runCollegeMatch.sh 
 
 ## Iteration 1
 This iteration, we focused on the student side. Students can now register and login to the app, get college matches, and get information about certain colleges.
