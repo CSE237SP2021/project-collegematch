@@ -47,27 +47,28 @@ public class UserManager {
 		while (keyboardIn.hasNextLine())
 		{
 			String[] userDataInArray = keyboardIn.nextLine().split(",");
-			if (Integer.parseInt(userDataInArray[1]) == 1) {
-				String username = userDataInArray[0];
-				int role = Integer.parseInt(userDataInArray[1]);
-				int sat = Integer.parseInt(userDataInArray[2]);
-				double gpa = Double.parseDouble(userDataInArray[3]);
-				int tuitionPreference = Integer.parseInt(userDataInArray[4]);
-				int sizePreference = Integer.parseInt(userDataInArray[5]);
-				String password = userDataInArray[6];
-				Student student = new Student(username, role, sat, gpa, tuitionPreference, sizePreference, password);
-				allUsers.add(student);
-				if (userDataInArray.length == 8) {
-					student.setSavedColleges(userDataInArray[7]);
-				} 
-			} else {
-				String username = userDataInArray[0];
-				String password = userDataInArray[3];
-				int role = Integer.parseInt(userDataInArray[1]);
-				int collegeID = Integer.parseInt(userDataInArray[2]);
-				allUsers.add(new AdmissionsOfficer(username, password, role, collegeID));
-			}
-			
+			if (userDataInArray.length >= 4 ) {
+				if (Integer.parseInt(userDataInArray[1]) == 1) {
+					String username = userDataInArray[0];
+					int role = Integer.parseInt(userDataInArray[1]);
+					int sat = Integer.parseInt(userDataInArray[2]);
+					double gpa = Double.parseDouble(userDataInArray[3]);
+					int tuitionPreference = Integer.parseInt(userDataInArray[4]);
+					int sizePreference = Integer.parseInt(userDataInArray[5]);
+					String password = userDataInArray[6];
+					Student student = new Student(username, role, sat, gpa, tuitionPreference, sizePreference, password);
+					allUsers.add(student);
+					if (userDataInArray.length == 8) {
+						student.setSavedColleges(userDataInArray[7]);
+					} 
+				} else {
+					String username = userDataInArray[0];
+					String password = userDataInArray[3];
+					int role = Integer.parseInt(userDataInArray[1]);
+					int collegeID = Integer.parseInt(userDataInArray[2]);
+					allUsers.add(new AdmissionsOfficer(username, password, role, collegeID));
+				}
+			} 
 		}
 		keyboardIn.close();
 		return allUsers;
@@ -122,26 +123,33 @@ public class UserManager {
 		//Reads lines of the file and appends them to StringBuffer
 		while (keyboardIn.hasNextLine()) {
 			String line = keyboardIn.nextLine();
+
 			String[] userDataInArray = line.split(",");
 			//finds line that matches student user name
-			if (userName.equals(userDataInArray[0])) {
-				String newLine = "";
-				//checks whether student has any saved colleges 
-				if (userDataInArray.length == 8) {
-					//if student does have saved colleges, rewrites the entire line 
-					userDataInArray[7] = student.getSavedCollegesStringList();
-					for (String field : userDataInArray) {
-						newLine = newLine + field + ",";
+			if (userDataInArray.length != 0) {
+				if (userName.equals(userDataInArray[0])) {
+					String newLine = "";
+					//checks whether student has any saved colleges 
+					if (userDataInArray.length == 8) {
+						//if student does have saved colleges, rewrites the entire line 
+						userDataInArray[7] = student.getSavedCollegesStringList();
+						for (String field : userDataInArray) {
+							newLine = newLine + field + ",";
+						}
+						newLine = newLine.substring(0, newLine.length() - 1);
+						line = newLine;
+					} else {
+						//if student doesn't have saved colleges, adds to end of line
+						if (line.charAt(line.length() - 1) == ',') {
+							newLine = line + student.getSavedCollegesStringList();
+						} else {
+							newLine = line + "," + student.getSavedCollegesStringList();
+						}
+						line = newLine;
 					}
-					newLine = newLine.substring(0, newLine.length() - 1);
-					line = newLine;
-				} else {
-					//if student doesn't have saved colleges, adds to end of line 
-					newLine = line + "," + student.getSavedCollegesStringList();
-					line = newLine;
 				}
+				buffer.append(line + System.lineSeparator());
 			}
-			buffer.append(line + System.lineSeparator());
 		}
 		String fileContents = buffer.toString();
 		keyboardIn.close();

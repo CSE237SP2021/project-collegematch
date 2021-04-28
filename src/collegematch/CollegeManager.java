@@ -120,14 +120,6 @@ public class CollegeManager {
 		writer.close();
 		return collegeID;
 	}
-	
-	//delete college from college.csv, and therefore delete college from the System 			new
-	public int deleteCollege(int collegeID) throws IOException {
-		//int index=collegeID-1;
-		colleges.remove(collegeID-1);
-		return collegeID;
-	}
-	
 
 	//returns College object when given collegeID
 	public College findCollege (int collegeID) {

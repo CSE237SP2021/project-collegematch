@@ -12,14 +12,14 @@ class testLogin {
 	@Test
 	void testStudentLoginSuccessful() {
 		UserManager UserManager = new UserManager();
-		User outputUserObject = UserManager.logIn("a", "b");
+		User outputUserObject = UserManager.logIn("mikib", "mikibasu");
 		assertTrue(outputUserObject != null);
 	}
 	
 	@Test
 	void testAdmissionOfficerLoginSuccessful() {
 		UserManager UserManager = new UserManager();
-		User outputUserObject = UserManager.logIn("harvard_rep", "h");
+		User outputUserObject = UserManager.logIn("emory_rep", "emory");
 		assertTrue(outputUserObject != null);
 	}
 	

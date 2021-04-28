@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class MessageBoard {
 	
 	private ArrayList<Message> messages;
+	//used txt file instead of csv file in order to handle commas in text 
 	private String filePath = "./src/collegematch/messageBoard.txt";
 	
 	public MessageBoard() {
@@ -20,6 +21,7 @@ public class MessageBoard {
 		}
 	}
 	
+	//read in messages from messageBoard.txt
 	public ArrayList<Message> readMessages() throws FileNotFoundException {
 		ArrayList<Message> allMessages = new ArrayList<Message>();
 		Scanner keyboardIn = new Scanner(new File(filePath));
@@ -45,6 +47,7 @@ public class MessageBoard {
 		System.out.println("");
 	}
 	
+	//adds to the messages array list 
 	public void addToMessageBoard(Message message) throws IOException {
 		messages.add(message);
 		FileWriter writer = new FileWriter(filePath, true);
@@ -53,6 +56,10 @@ public class MessageBoard {
 		writer.append("\t");
 		writer.append(message.getMessageDescription());
 		writer.close();	
+	}
+	
+	public int getMessageBoardSize() {
+		return messages.size();
 	}
 
 

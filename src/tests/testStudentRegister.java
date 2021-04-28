@@ -30,7 +30,7 @@ class testStudentRegister {
 	@Test
 	void testDuplicateUsername() {
 		UserManager userManager = new UserManager();
-		boolean duplicate = userManager.checkForDuplicateUsername("a");
+		boolean duplicate = userManager.checkForDuplicateUsername("batman");
 		assertEquals(true, duplicate);
 	}
 	

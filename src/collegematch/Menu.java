@@ -411,7 +411,7 @@ public class Menu {
 			int collegeSelection = getIntInput();
 			College collegeToBeRemoved = collegeManager.findCollege(collegeSelection);
 			//checks if student selects input correctly from list 
-//			if (collegeSelection > 0 && collegeSelection <= savedColleges.size()) {
+			if (collegeSelection > 0 && collegeSelection <= savedColleges.size()) {
 				//deletes college from local Student object savedColleges ArrayList
 				userManager.deleteSavedCollege(student, collegeManager.findCollege(collegeSelection));
 				//displays current saved colleges 
@@ -428,7 +428,9 @@ public class Menu {
 				//deletes college from userInfo.csv file	
 				userManager.updateSavedCollegesInFile(student);
 				break;
-//			} 
+			} else {
+				System.out.println("Invalid college ID.");
+			}
 		}
 	}
 
@@ -627,11 +629,15 @@ public class Menu {
 				runWelcomeMenu();
 			} else if (confirmation.equals("n")) {
 				if (userType == "student") {
-					displayStudentMenu();
-					processBaseMethod("int", "processStudentMenu");
+					while(true) {
+						displayStudentMenu();
+						processBaseMethod("int", "processStudentMenu");
+					}	
 				} else {
-					displayAdmissionsOfficerMenu();
-					processBaseMethod("int", "processAdmissionsOfficerMenu");
+					while(true) {
+						displayAdmissionsOfficerMenu();
+						processBaseMethod("int", "processAdmissionsOfficerMenu");
+					}
 				}
 					
 			} 
@@ -675,15 +681,29 @@ public class Menu {
 	
 	//deletes new line when obtaining double from user
 	private double getDoubleInput() {
-		double selected = keyboardIn.nextDouble();
-		String notUsed = keyboardIn.nextLine();
-		return selected;
+		while (true) {
+			try {
+				double selected = keyboardIn.nextDouble();
+				String notUsed = keyboardIn.nextLine();
+				return selected;
+			} catch (Exception e) {
+				keyboardIn.next();
+			}
+		}
 	}
 	
 	//deletes new line when obtaining int from user
 	private int getIntInput() {
-		int selected = keyboardIn.nextInt();
-		String notUsed = keyboardIn.nextLine();
-		return selected;
+		while (true) {
+			try {
+				int selected = keyboardIn.nextInt();
+				String notUsed = keyboardIn.nextLine();
+				return selected;
+			} catch (Exception e) {
+				keyboardIn.next();
+			}
+			
+		}
+		
 	}
 }

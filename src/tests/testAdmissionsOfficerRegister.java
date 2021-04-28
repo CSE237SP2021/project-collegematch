@@ -63,5 +63,75 @@ class testAdmissionsOfficerRegister {
 		boolean notADuplicate = collegeManager.checkForDuplicateCollegename2("MU");
 		assertEquals(false, notADuplicate);
 	}
+	
+	@Test 
+	void testCorrectLocation() {
+		CollegeManager collegeManager = new CollegeManager();
+		boolean campusLocation = collegeManager.validateLocation("AZ");
+		assertTrue(campusLocation);
+	}
+	
+	@Test 
+	void testIncorrectLocation() {
+		CollegeManager collegeManager = new CollegeManager();
+		boolean campusLocation = collegeManager.validateLocation("Arizona");
+		assertFalse(campusLocation);
+	}
+	
+	@Test 
+	void testCorrectSATScore() {
+		CollegeManager collegeManager = new CollegeManager();
+		boolean satScoreFormatted = collegeManager.validateSATScore(1200);
+		assertTrue(satScoreFormatted);
+	}
+	
+	@Test 
+	void testIncorrectSATScore() {
+		CollegeManager collegeManager = new CollegeManager();
+		boolean satScoreFormatted = collegeManager.validateSATScore(1700);
+		assertFalse(satScoreFormatted);
+	}
+	
+	@Test 
+	void testCorrectGPA() {
+		CollegeManager collegeManager = new CollegeManager();
+		boolean gpaFormatted = collegeManager.validateGPA(3.0);
+		assertTrue(gpaFormatted);
+	}
+	
+	@Test 
+	void testIncorrectGPA() {
+		CollegeManager collegeManager = new CollegeManager();
+		boolean gpaFormatted = collegeManager.validateGPA(5.09);
+		assertFalse(gpaFormatted);
+	}
+	
+	@Test 
+	void testCorrectTuitionPreference() {
+		CollegeManager collegeManager = new CollegeManager();
+		boolean tuitionFormatted = collegeManager.validateTuition(10000);
+		assertTrue(tuitionFormatted);
+	}
+	
+	@Test 
+	void testIncorrectTuitionPreference() {
+		CollegeManager collegeManager = new CollegeManager();
+		boolean tuitionFormatted = collegeManager.validateTuition(200000);
+		assertFalse(tuitionFormatted);
+	}
+	
+	@Test 
+	void testCorrectSizePreference() {
+		CollegeManager collegeManager = new CollegeManager();
+		boolean sizeFormatted = collegeManager.validateSize(20);
+		assertTrue(sizeFormatted);
+	}
+	
+	@Test 
+	void testIncorrectSizePreference() {
+		CollegeManager collegeManager = new CollegeManager();
+		boolean sizeFormatted = collegeManager.validateSize(70000);
+		assertFalse(sizeFormatted);
+	}
 
 }
