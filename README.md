@@ -32,7 +32,7 @@ Student
 - password: mikibasu
 
 College Admissions Officer
-- username: washu_rep
-- password: washurules
+- username: emory_rep
+- password: emory
 
 College admissions officers can view how many students saved their college to gauge interest and can now update their college information. Both students and college admissions officers can view a message board filled with updates, and college admission officers can also add to the message board. 
