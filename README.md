@@ -23,3 +23,4 @@ The 4 colleges are Dartmouth College, Havard College, Washington University, and
 This iteration, we got started on the admissions officer side and continued working on the student side. Admission officers can now login, register, and see a menu of options. When admission officers register they can also add their school to our "database" if their school is not already present. Students can now add and delete schools from their saved colleges list. 
 
 In the next iteration, we plan to continue working on both the admission officer and the student side. On the admission officer side, we plan to allow admission officers to edit their school's information. We also plan to create a message board that students can visit and admission officers can add with exciting updates about their schools. Lastly, we plan to better handle errors from incorrect user inputs. 
+
